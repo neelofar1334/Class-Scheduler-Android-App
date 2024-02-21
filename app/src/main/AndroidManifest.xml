@@ -13,6 +13,51 @@
         android:theme="@style/Theme.C196"
         tools:targetApi="31">
         <activity
+            android:name=".controllers.AddAssessment"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.AddCourse"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.AddNotes"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.AddTerm"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.AssessmentDetail"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.AssessmentList"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.CourseDetail"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.CourseList"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.EditAssessment"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.EditCourse"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.EditNotes"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.EditTerm"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.Home"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.TermDetail"
+            android:exported="false" />
+        <activity
+            android:name=".controllers.TermList"
+            android:exported="false" />
+        <activity
             android:name=".model.MainActivity"
             android:exported="true">
             <intent-filter>
