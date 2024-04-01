@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.example.c196.R;
 
-public class CourseDetail extends AppCompatActivity {
+public class CourseDetail extends MenuActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

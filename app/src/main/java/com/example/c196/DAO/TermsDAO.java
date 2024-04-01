@@ -1,24 +1,32 @@
 package com.example.c196.DAO;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
+import com.example.c196.DAO.Relationships.TermsWithCourses;
+import com.example.c196.entities.Courses;
 import com.example.c196.entities.Terms;
 import java.util.List;
 
 @Dao
 public interface TermsDAO {
+
     //retrieves all terms
     @Query("SELECT * FROM terms")
-    List<Terms> getAllTerms();
+    LiveData<List<Terms>> getAllTerms();
 
-    //retrieves single term by ID
+    //retrieves single course by name
+    @Query("SELECT * FROM terms WHERE `Term Name` = :name LIMIT 1")
+    Terms getTermName(String name);
+
     @Query("SELECT * FROM terms WHERE termID = :termID ORDER BY termID ASC")
-    Terms getTermById(int termID);
+    LiveData<List<Terms>> getTermById(int termID);
 
     //inserts new term
     @Insert(onConflict = OnConflictStrategy.ABORT)
@@ -31,5 +39,10 @@ public interface TermsDAO {
     //removes a term
     @Delete
     void delete(Terms term);
+
+    //gets terms along with associated courses
+    @Transaction
+    @Query("SELECT * FROM terms")
+    LiveData<List<TermsWithCourses>> getTermsWithCourses();
 }
 

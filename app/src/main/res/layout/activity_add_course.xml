@@ -6,4 +6,123 @@
     android:layout_height="match_parent"
     tools:context=".controllers.AddCourse">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="Add Course"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <EditText
+        android:id="@+id/title"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintBottom_toTopOf="@id/status"
+        android:hint="Enter course title"
+        android:inputType="text"
+        android:maxLength="120"
+        style="@style/InputText" />
+
+    <EditText
+        android:id="@+id/status"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintBottom_toTopOf="@id/InstructorName"
+        android:hint="Enter course status"
+        android:inputType="text"
+        android:maxLength="120"
+        style="@style/InputText"/>
+
+    <EditText
+        android:id="@+id/InstructorName"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status"
+        app:layout_constraintBottom_toTopOf="@id/InstructorEmail"
+        android:hint="Enter instructor name"
+        android:inputType="text"
+        android:maxLength="120"
+        style="@style/InputText"/>
+
+    <EditText
+        android:id="@+id/InstructorEmail"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/InstructorName"
+        app:layout_constraintBottom_toTopOf="@id/InstructorPhone"
+        android:hint="Enter instructor email"
+        android:inputType="textEmailAddress"
+        android:maxLength="120"
+        style="@style/InputText"/>
+
+    <EditText
+        android:id="@+id/InstructorPhone"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/InstructorEmail"
+        app:layout_constraintBottom_toTopOf="@id/datePicker"
+        android:hint="Enter instructor phone"
+        android:inputType="phone"
+        android:maxLength="120"
+        style="@style/InputText"/>
+
+    <Button
+        android:id="@+id/datePicker"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/InstructorPhone"
+        app:layout_constraintBottom_toTopOf="@id/submitButton"
+        android:text="Choose Course Start/End Date"
+        android:textSize="17sp"
+        android:backgroundTint="@color/accent_green"
+        app:cornerRadius="0dp"
+        style="@style/InputText"/>
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/datePicker"
+        app:layout_constraintEnd_toStartOf="@+id/cancelButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp"
+        app:cornerRadius="0dp"
+        style="@style/PurpleButton"/>
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        app:layout_constraintStart_toEndOf="@+id/submitButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/submitButton"
+        app:layout_constraintBottom_toBottomOf="@+id/submitButton"
+        android:layout_marginStart="8dp"
+        app:cornerRadius="0dp"
+        style="@style/PurpleButton"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.c196.entities;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
@@ -10,16 +11,24 @@ public class Terms {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
+    private int termID;
+    @ColumnInfo(name = "Term Name")
+    private String name;
+    @ColumnInfo(name = "Term Start")
+    private String startDate;
+    @ColumnInfo(name = "Term End")
+    private String endDate;
+    @ColumnInfo(name = "courseID")
+    private int courseID;
 
-    public int termID;
-    public String name;
-    public Date startDate;
-    public Date endDate;
-
-    public Terms(String name, Date startDate, Date endDate) {
+    public Terms(String name, String startDate, String endDate) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    //no args constructor for room framework
+    public Terms() {
     }
 
     public int getTermID() {
@@ -38,20 +47,28 @@ public class Terms {
         this.name = name;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public int getCourseID() {
+        return courseID;
+    }
+
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
     }
 }
 

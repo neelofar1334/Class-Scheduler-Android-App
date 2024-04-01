@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.example.c196.R;
 
-public class AddAssessment extends AppCompatActivity {
+public class AddAssessment extends MenuActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

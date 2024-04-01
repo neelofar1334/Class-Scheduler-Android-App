@@ -1,8 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.C196" parent="Theme.Material3.DayNight">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/purple</item>
+        <item name="colorPrimaryDark">#FF4702C1</item>
+        <item name="colorAccent">#FF8BC34A</item>
     </style>
 
     <style name="Theme.C196" parent="Base.Theme.C196" />

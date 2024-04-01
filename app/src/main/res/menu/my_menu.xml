@@ -1,12 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_search"
+    <item
+        android:id="@+id/action_search"
         android:title="Search"
-        android:icon="@drawable/search" />
+        android:icon="@drawable/search"
+        app:showAsAction="collapseActionView|ifRoom"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
 
     <item android:id="@+id/action_home"
         android:title="Home"
-        android:icon="@drawable/home" />
+        android:icon="@drawable/home"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_courseList"
+        android:title="Course List" />
+
+    <item android:id="@+id/action_addCourse"
+        android:title="Add Course" />
+
+    <item android:id="@+id/action_editCourse"
+        android:title="Edit Course" />
+
+    <item android:id="@+id/action_assessmentsList"
+        android:title="Assessments List" />
+
+    <item android:id="@+id/action_addAssessment"
+        android:title="Add Assessment" />
+
+    <item android:id="@+id/action_editAssessment"
+        android:title="Edit Assessment" />
+
+    <item android:id="@+id/action_termList"
+        android:title="Term List" />
+
+    <item android:id="@+id/action_addTerm"
+        android:title="Add Term" />
+
+    <item android:id="@+id/action_editTerm"
+        android:title="Edit Term" />
+
+    <item android:id="@+id/action_notes"
+        android:title="Notes" />
 
 </menu>

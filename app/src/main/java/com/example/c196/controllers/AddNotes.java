@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.example.c196.R;
 
-public class AddNotes extends AppCompatActivity {
+public class AddNotes extends MenuActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

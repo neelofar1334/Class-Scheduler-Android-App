@@ -12,57 +12,54 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.C196"
         tools:targetApi="31">
+
         <activity
             android:name=".controllers.AddAssessment"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.AddCourse"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.AddNotes"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.AddTerm"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.AssessmentDetail"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.AssessmentList"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.CourseDetail"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.CourseList"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.EditAssessment"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.EditCourse"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.EditNotes"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.EditTerm"
-            android:exported="false" />
-        <activity
-            android:name=".controllers.Home"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.TermDetail"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".controllers.TermList"
-            android:exported="false" />
+            android:exported="true" />
         <activity
-            android:name=".model.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
