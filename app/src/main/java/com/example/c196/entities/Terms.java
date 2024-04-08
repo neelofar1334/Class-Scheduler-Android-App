@@ -6,23 +6,23 @@ import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
 import java.util.Date;
 
-@Entity(tableName = "terms")
+@Entity(tableName = "Terms")
 public class Terms {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
     private int termID;
-    @ColumnInfo(name = "Term Name")
-    private String name;
-    @ColumnInfo(name = "Term Start")
+    @ColumnInfo(name = "termTitle")
+    private String title;
+    @ColumnInfo(name = "termStart")
     private String startDate;
-    @ColumnInfo(name = "Term End")
+    @ColumnInfo(name = "termEnd")
     private String endDate;
     @ColumnInfo(name = "courseID")
     private int courseID;
 
-    public Terms(String name, String startDate, String endDate) {
-        this.name = name;
+    public Terms(String title, String startDate, String endDate) {
+        this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -39,12 +39,12 @@ public class Terms {
         this.termID = termID;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getStartDate() {

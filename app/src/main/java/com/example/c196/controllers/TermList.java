@@ -29,23 +29,22 @@ public class TermList extends MenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_list);
 
-        // Setup RecyclerView and Adapter
+        //setup RecyclerView and Adapter
         RecyclerView recyclerView = findViewById(R.id.terms_recycler_view);
         adapter = new TermListAdapter(this, new ArrayList<>());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        // Initialize TermViewModel
+        //initialize TermViewModel
         termViewModel = new ViewModelProvider(this).get(TermViewModel.class);
 
-        // Observe LiveData from ViewModel
+        //observe LiveData from ViewModel
         termViewModel.getAllTerms().observe(this, terms -> {
-            // Update the cached copy of the terms in the adapter.
+            //update the cached copy of the terms in the adapter.
             adapter.setTerms(terms);
         });
     }
 
-    // Menu setup if needed
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_menu, menu);

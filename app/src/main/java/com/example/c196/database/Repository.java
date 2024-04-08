@@ -7,9 +7,11 @@ import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.c196.DAO.AssessmentsDAO;
 import com.example.c196.DAO.CoursesDAO;
 import com.example.c196.DAO.TermsDAO;
 import com.example.c196.MainActivity;
+import com.example.c196.entities.Assessments;
 import com.example.c196.entities.Courses;
 import com.example.c196.entities.Terms;
 import com.example.c196.viewmodel.CourseViewModel;
@@ -24,11 +26,12 @@ public class Repository {
     //m is for instance variable, s is for static variable
     private CoursesDAO mCourseDAO;
     private TermsDAO mTermsDAO;
+    private AssessmentsDAO mAssessmentsDAO;
     private ExecutorService databaseExecutor = Executors.newFixedThreadPool(4);
     private Context applicationContext;
 
     public Repository(Application application) {
-        DatabaseBuilder db = DatabaseBuilder.getDatabase(application);
+        AppDatabase db = AppDatabase.getDatabase(application);
         mCourseDAO = db.coursesDao();
         mTermsDAO = db.termsDAO();
         this.applicationContext = application.getApplicationContext();
@@ -59,11 +62,11 @@ public class Repository {
         return mTermsDAO.getAllTerms();
     }
 
-    // Async execution for write operation
+    //async execution for write operation
     public void insert(final Terms term) {
         databaseExecutor.execute(() -> {
             mTermsDAO.insert(term);
-            // Handler to post success message on the main thread
+            //handler to post success message on the main thread
             new Handler(Looper.getMainLooper()).post(() -> {
                 Toast.makeText(applicationContext, "Term saved successfully", Toast.LENGTH_SHORT).show();
             });
@@ -76,5 +79,25 @@ public class Repository {
 
     public void delete(Terms terms) {
         databaseExecutor.execute(() -> mTermsDAO.delete(terms));
+    }
+
+
+    //Assessments
+    public void insert(final Assessments assessments) {
+        databaseExecutor.execute(() -> {
+            mAssessmentsDAO.insert(assessments);
+            //handler to post success message on the main thread
+            new Handler(Looper.getMainLooper()).post(() -> {
+                Toast.makeText(applicationContext, "Assessment saved successfully", Toast.LENGTH_SHORT).show();
+            });
+        });
+    }
+
+    public void update(Assessments assessments) {
+        databaseExecutor.execute(() -> mAssessmentsDAO.update(assessments));
+    }
+
+    public void delete(Assessments assessments) {
+        databaseExecutor.execute(() -> mAssessmentsDAO.delete(assessments));
     }
 }

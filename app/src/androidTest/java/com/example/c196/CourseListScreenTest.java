@@ -11,7 +11,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import com.example.c196.DAO.CoursesDAO;
 import com.example.c196.DAO.TermsDAO;
 import com.example.c196.controllers.CourseList;
-import com.example.c196.database.DatabaseBuilder;
+import com.example.c196.database.AppDatabase;
 import com.example.c196.entities.Courses;
 import com.example.c196.entities.Terms;
 
@@ -34,34 +34,34 @@ import android.util.Log;
 @RunWith(AndroidJUnit4.class)
 public class CourseListScreenTest {
 
-    private DatabaseBuilder db;
+    private AppDatabase db;
     private static final String TAG = CourseListScreenTest.class.getSimpleName();
 
     @Before
     public void populateDb() {
         Log.d(TAG, "populating test database");
         Context context = ApplicationProvider.getApplicationContext();
-        db = Room.inMemoryDatabaseBuilder(context, DatabaseBuilder.class)
+        db = Room.inMemoryDatabaseBuilder(context, AppDatabase.class)
                 .allowMainThreadQueries()
                 .build();
 
         //insert a Term
-        Terms testTerm = new Terms("Test Term", "2020-09-01", "2021-01-01");
-        db.termsDAO().insert(testTerm);
+        Terms terms = new Terms("Term", "2020-09-01", "2021-01-01");
+        db.termsDAO().insert(terms);
         Log.d(TAG, "Inserted test term");
 
         //insert a Course that references this Term
-        Courses testCourse = new Courses("Test Course", "2020-09-01", "2020-12-15", "In Progress", "Test Term", 1);
-        db.coursesDao().insert(testCourse);
+        Courses courses = new Courses("Course", "2020-09-01", "2020-12-15", "In Progress", "test name", "test email", "test phone", "Term", 1);
+        db.coursesDao().insert(courses);
         Log.d(TAG, "Inserted test course");
 
 
         //retrieve the course by title
-        Courses insertedCourse = db.coursesDao().getCourseByTitle("Test Course");
+        Courses insertedCourse = db.coursesDao().getCourseByTitle("Course");
         if (insertedCourse != null) {
             Log.d(TAG, "Retrieved course: " + insertedCourse.getTitle() + ", Term: " + insertedCourse.getTermName());
         } else {
-            Log.d(TAG, "No course found with title: Test Course");
+            Log.d(TAG, "No course found with title: Course");
         }
 
     }
@@ -78,7 +78,7 @@ public class CourseListScreenTest {
                 .perform(RecyclerViewActions.scrollToPosition(0));
 
         onView(withId(R.id.courses_recycler_view))
-                .check(matches(hasDescendant(withText("Test Course"))));
+                .check(matches(hasDescendant(withText("Course"))));
 
     }
 

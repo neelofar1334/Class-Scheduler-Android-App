@@ -1,16 +1,23 @@
 package com.example.c196.entities;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "assessments")
+@Entity(tableName = "Assessments")
 public class Assessments {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "assessmentID")
     private int assessmentId;
+    @ColumnInfo(name = "courseID")
     private int courseId;
+    @ColumnInfo(name = "title")
     private String title;
+    @ColumnInfo(name = "type")
     private String type;
+    @ColumnInfo(name = "startDate")
     private String startDate;
+    @ColumnInfo(name = "endDate")
     private String endDate;
 
     public Assessments(int courseId, String title, String type, String startDate, String endDate) {

@@ -14,6 +14,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments(mapOf("room.schemaLocation" to "${projectDir}/schemas"))
+            }
+        }
     }
 
     buildTypes {
@@ -38,8 +44,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("junit:junit:4.12") // Testing Libraries
     androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.5.1")
-    // Espresso Idling Resource
-    androidTestImplementation ("androidx.test.espresso:espresso-idling-resource:3.5.1")
 
 
     //room dependencies

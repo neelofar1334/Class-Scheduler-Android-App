@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import com.example.c196.DAO.Relationships.TermsWithCourses;
 import com.example.c196.DAO.TermsDAO;
-import com.example.c196.database.DatabaseBuilder;
+import com.example.c196.database.AppDatabase;
 import com.example.c196.database.Repository;
 import com.example.c196.entities.Terms;
 

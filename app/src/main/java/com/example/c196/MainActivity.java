@@ -20,7 +20,7 @@ import com.example.c196.controllers.EditCourse;
 import com.example.c196.controllers.EditTerm;
 import com.example.c196.controllers.MenuActivity;
 import com.example.c196.controllers.TermList;
-import com.example.c196.database.DatabaseBuilder;
+import com.example.c196.database.AppDatabase;
 import com.example.c196.database.Repository;
 import com.example.c196.entities.Notes;
 
@@ -37,7 +37,7 @@ public class MainActivity extends MenuActivity {
         setContentView(R.layout.activity_home);
 
         //initialize database and repository
-        DatabaseBuilder db = DatabaseBuilder.getDatabase(this);
+        AppDatabase db = AppDatabase.getDatabase(this);
         Repository repository = new Repository(getApplication());
 
         //make calendar show current date

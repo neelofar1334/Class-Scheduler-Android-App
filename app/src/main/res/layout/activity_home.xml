@@ -8,16 +8,13 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-smallcaps"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Home"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/AppTextView"/>
 
     <CalendarView
         android:id="@+id/homeCalendar"
@@ -40,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/homeCalendar"
         app:cornerRadius="0dp"
-        style="@style/PurpleButton"/>
+        style="@style/AppButton"/>
 
     <Button
         android:id="@+id/assessmentsButton"
@@ -53,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/coursesButton"
         app:cornerRadius="0dp"
-        style="@style/PurpleButton"/>
+        style="@style/AppButton"/>
 
     <Button
         android:id="@+id/termsButton"
@@ -66,6 +63,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/assessmentsButton"
         app:cornerRadius="0dp"
-        style="@style/PurpleButton" />
+        style="@style/AppButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

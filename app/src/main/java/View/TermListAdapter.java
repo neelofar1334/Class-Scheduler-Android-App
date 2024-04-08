@@ -68,7 +68,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
         }
 
         void bind(final Terms current) {
-            termTextView.setText(current.getName());
+            termTextView.setText(current.getTitle());
             startDateTextView.setText(current.getStartDate());
             endDateTextView.setText(current.getEndDate());
 
@@ -77,7 +77,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
                 if (position != RecyclerView.NO_POSITION) {
                     Intent intent = new Intent(v.getContext(), TermDetail.class);
                     intent.putExtra("termId", current.getTermID());
-                    intent.putExtra("term", current.getName());
+                    intent.putExtra("term", current.getTitle());
                     intent.putExtra("start date", current.getStartDate());
                     intent.putExtra("end date", current.getEndDate());
                     v.getContext().startActivity(intent);

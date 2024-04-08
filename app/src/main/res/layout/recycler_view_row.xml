@@ -47,7 +47,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/icon"
                 app:layout_constraintTop_toTopOf="@+id/icon"
-                style="@style/Text"/>
+                android:textColor="@color/white"
+                style="@style/AppText"/>
 
             <TextView
                 android:id="@+id/course"
@@ -58,7 +59,8 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/term"
                 app:layout_constraintStart_toEndOf="@+id/term"
                 app:layout_constraintTop_toTopOf="@+id/icon"
-                style="@style/Text"/>
+                android:textColor="@color/white"
+                style="@style/AppText"/>
 
             <TextView
                 android:id="@+id/status"
@@ -69,7 +71,8 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/term"
                 app:layout_constraintStart_toEndOf="@+id/course"
                 app:layout_constraintTop_toTopOf="@+id/icon"
-                style="@style/Text"/>
+                android:textColor="@color/white"
+                style="@style/AppText"/>
 
             <TextView
                 android:id="@+id/startDate"
@@ -80,7 +83,8 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/term"
                 app:layout_constraintStart_toEndOf="@+id/status"
                 app:layout_constraintTop_toTopOf="@+id/icon"
-                style="@style/Text"/>
+                android:textColor="@color/white"
+                style="@style/AppText"/>
 
             <TextView
                 android:id="@+id/endDate"
@@ -91,7 +95,8 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/term"
                 app:layout_constraintStart_toEndOf="@+id/startDate"
                 app:layout_constraintTop_toTopOf="@+id/icon"
-                style="@style/Text"/>
+                android:textColor="@color/white"
+                style="@style/AppText"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -3,4 +3,9 @@
     <string name="courses">Courses</string>
     <string name="terms">Terms</string>
     <string name="assessments">Assessments</string>
+    <string-array name="assessment_types">
+        <item>Choose Assessment Type</item> <!-- hint -->
+        <item>Objective Assessment</item>
+        <item>Performance Assessment</item>
+    </string-array>
 </resources>

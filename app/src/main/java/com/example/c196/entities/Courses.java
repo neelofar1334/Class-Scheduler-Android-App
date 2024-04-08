@@ -7,11 +7,7 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-@Entity(tableName = "courses",
-        foreignKeys = @ForeignKey(entity = Terms.class,
-                parentColumns = "termID",
-                childColumns = "termId",
-                onDelete = ForeignKey.CASCADE))
+@Entity(tableName = "Courses")
 public class Courses {
 
     @PrimaryKey(autoGenerate = true)
@@ -25,16 +21,25 @@ public class Courses {
     private String endDate;
     @ColumnInfo(name = "status")
     private String status; // "In Progress", "Completed", "Dropped", "Plan to take"
-    @ColumnInfo(name = "Term Name")
+    @ColumnInfo(name = "instructorName")
+    private String instructorName;
+    @ColumnInfo(name = "instructorEmail")
+    private String instructorEmail;
+    @ColumnInfo(name = "instructorPhone")
+    private String instructorPhone;
+    @ColumnInfo(name = "termName")
     private String termName;
     @ColumnInfo(name = "termId")
-    private int termId; //foreign key
+    private int termId; //TODO should be a foreign key
 
-    public Courses(String title, String startDate, String endDate, String status, String termName, int termId) {
+    public Courses(String title, String startDate, String endDate, String status, String instructorName, String instructorEmail, String instructorPhone, String termName, int termId) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
+        this.instructorName = instructorName;
+        this.instructorEmail = instructorEmail;
+        this.instructorPhone = instructorPhone;
         this.termName = termName;
         this.termId = termId;
     }
@@ -47,8 +52,8 @@ public class Courses {
         return courseID;
     }
 
-    public void setCourseID(int id) {
-        this.courseID = id;
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
     }
 
     public String getTitle() {
@@ -83,6 +88,30 @@ public class Courses {
         this.status = status;
     }
 
+    public String getInstructorName() {
+        return instructorName;
+    }
+
+    public void setInstructorName(String instructorName) {
+        this.instructorName = instructorName;
+    }
+
+    public String getInstructorEmail() {
+        return instructorEmail;
+    }
+
+    public void setInstructorEmail(String instructorEmail) {
+        this.instructorEmail = instructorEmail;
+    }
+
+    public String getInstructorPhone() {
+        return instructorPhone;
+    }
+
+    public void setInstructorPhone(String instructorPhone) {
+        this.instructorPhone = instructorPhone;
+    }
+
     public String getTermName() {
         return termName;
     }
@@ -91,8 +120,17 @@ public class Courses {
         this.termName = termName;
     }
 
-    public int getTermId() { return termId; }
+    public int getTermId() {
+        return termId;
+    }
 
-    public void setTermId(int termId) { this.termId = termId; }
+    public void setTermId(int termId) {
+        this.termId = termId;
+    }
+
 }
+
+
+
+
 
