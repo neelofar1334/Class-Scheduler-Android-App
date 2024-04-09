@@ -31,7 +31,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
     @NonNull
     @Override
     public TermViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.recycler_view_row, parent, false);
+        View itemView = mInflater.inflate(R.layout.term_recycler_view_row, parent, false);
         return new TermViewHolder(itemView, context);
     }
 
@@ -53,7 +53,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
     }
 
     static class TermViewHolder extends RecyclerView.ViewHolder {
-        private final TextView termTextView;
+        private final TextView titleTextView;
         private final TextView startDateTextView;
         private final TextView endDateTextView;
         private final Context context;
@@ -62,13 +62,13 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
         TermViewHolder(View itemView, Context context) {
             super(itemView);
             this.context = context;
-            termTextView = itemView.findViewById(R.id.term);
+            titleTextView = itemView.findViewById(R.id.title);
             startDateTextView = itemView.findViewById(R.id.startDate);
             endDateTextView = itemView.findViewById(R.id.endDate);
         }
 
         void bind(final Terms current) {
-            termTextView.setText(current.getTitle());
+            titleTextView.setText(current.getTitle());
             startDateTextView.setText(current.getStartDate());
             endDateTextView.setText(current.getEndDate());
 
@@ -77,7 +77,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
                 if (position != RecyclerView.NO_POSITION) {
                     Intent intent = new Intent(v.getContext(), TermDetail.class);
                     intent.putExtra("termId", current.getTermID());
-                    intent.putExtra("term", current.getTitle());
+                    intent.putExtra("title", current.getTitle());
                     intent.putExtra("start date", current.getStartDate());
                     intent.putExtra("end date", current.getEndDate());
                     v.getContext().startActivity(intent);

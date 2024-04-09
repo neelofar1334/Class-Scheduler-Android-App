@@ -13,7 +13,7 @@ import com.example.c196.entities.Assessments;
 import com.example.c196.entities.Courses;
 import com.example.c196.entities.Terms;
 
-@Database(entities = {Assessments.class, Courses.class, Terms.class}, version = 4)
+@Database(entities = {Assessments.class, Courses.class, Terms.class}, version = 5)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract AssessmentsDAO assessmentDao();
     public abstract CoursesDAO coursesDao();

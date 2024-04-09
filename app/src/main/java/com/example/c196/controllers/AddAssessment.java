@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.c196.DAO.AssessmentsDAO;
 import com.example.c196.R;
 import com.example.c196.database.AppDatabase;
+import com.example.c196.database.Repository;
 import com.example.c196.entities.Assessments;
 import com.example.c196.entities.Terms;
 
@@ -34,13 +35,15 @@ public class AddAssessment extends MenuActivity {
     private EditText titleEditText;
     private Spinner typeSpinner;
     private String startDate, endDate, assessmentType;
-    private final ExecutorService databaseExecutor = Executors.newSingleThreadExecutor();
-    private Terms terms;
+    private Repository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_assessment);
+
+        //initialize the repository
+        repository = new Repository(getApplication());
 
         //initialize UI components
         startDatePickerButton = findViewById(R.id.startDatePicker);
@@ -127,24 +130,18 @@ public class AddAssessment extends MenuActivity {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
-        databaseExecutor.execute(() -> {
-            Assessments assessment = new Assessments();
-            assessment.setTitle(title);
-            assessment.setType(assessmentType);
-            assessment.setStartDate(startDate);
-            assessment.setEndDate(endDate);
 
-            AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
-            AssessmentsDAO dao = db.assessmentDao();
-            Log.d("SaveAssessment", "Attempting to save assessment: " + title);
-            dao.insert(assessment);
-            Log.d("SaveAssessment", "Assessment saved successfully.");
+        Assessments assessment = new Assessments();
+        assessment.setTitle(title);
+        assessment.setType(assessmentType);
+        assessment.setStartDate(startDate);
+        assessment.setEndDate(endDate);
 
-            runOnUiThread(() -> {
-                Toast.makeText(AddAssessment.this, "Assessment saved successfully", Toast.LENGTH_SHORT).show();
-                finish();
-            });
-        });
+        //use the repository to insert the new term
+        repository.insert(assessment);
+
+        Toast.makeText(AddAssessment.this, "Assessment saved successfully", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
 }

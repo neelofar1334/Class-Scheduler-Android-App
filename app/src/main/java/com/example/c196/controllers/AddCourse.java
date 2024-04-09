@@ -18,8 +18,10 @@ import com.example.c196.DAO.AssessmentsDAO;
 import com.example.c196.DAO.CoursesDAO;
 import com.example.c196.R;
 import com.example.c196.database.AppDatabase;
+import com.example.c196.database.Repository;
 import com.example.c196.entities.Assessments;
 import com.example.c196.entities.Courses;
+import com.example.c196.entities.Terms;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,12 +33,15 @@ public class AddCourse extends MenuActivity {
     private Button startDatePickerButton, endDatePickerButton, submitButton, cancelButton;
     private EditText titleEditText, statusEditText, instructorNameEditText, instructorEmailEditText, instructorPhoneEditText;
     private String startDate, endDate;
-    private final ExecutorService databaseExecutor = Executors.newSingleThreadExecutor();
+    private Repository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
+
+        //initialize the repository
+        repository = new Repository(getApplication());
 
         //initialize UI components
         startDatePickerButton = findViewById(R.id.startDatePicker);
@@ -101,33 +106,19 @@ public class AddCourse extends MenuActivity {
             return;
         }
 
-        databaseExecutor.execute(() -> {
-            try {
-                Courses course = new Courses();
-                course.setTitle(title);
-                course.setStatus(status);
-                course.setInstructorName(instructorName);
-                course.setInstructorEmail(instructorEmail);
-                course.setInstructorPhone(instructorPhone);
-                course.setStartDate(startDate);
-                course.setEndDate(endDate);
+        //create new course object
+        Courses course = new Courses();
+        course.setTitle(title);
+        course.setStatus(status);
+        course.setInstructorName(instructorName);
+        course.setInstructorEmail(instructorEmail);
+        course.setInstructorPhone(instructorPhone);
+        course.setStartDate(startDate);
+        course.setEndDate(endDate);
 
-                AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
-                CoursesDAO dao = db.coursesDao();
-                Log.d("SaveCourse", "Attempting to save course: " + title);
-                dao.insert(course);
-                Log.d("SaveCourse", "Course saved successfully.");
+        repository.insert(course);
 
-                runOnUiThread(() -> Toast.makeText(AddCourse.this, "Course saved successfully", Toast.LENGTH_SHORT).show());
-            } catch (Exception e) {
-                Log.e("SaveCourse", "Error saving course", e);
-                runOnUiThread(() -> Toast.makeText(AddCourse.this, "Failed to save course", Toast.LENGTH_SHORT).show());
-            }
-
-            runOnUiThread(() -> {
-                Toast.makeText(AddCourse.this, "Course saved successfully", Toast.LENGTH_SHORT).show();
-                finish();
-            });
-        });
+        Toast.makeText(AddCourse.this, "Course saved successfully", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

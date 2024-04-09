@@ -29,9 +29,9 @@
                 android:layout_height="50dp"
                 android:contentDescription="graduation cap"
                 android:padding="10dp"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/course"
+                app:layout_constraintEnd_toStartOf="@+id/title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/baseline_school_24"
@@ -39,50 +39,40 @@
 
 
             <TextView
-                android:id="@+id/course"
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="314dp"
-                android:padding="5dp"
-                android:text="Course"
+                android:layout_marginStart="5dp"
+                android:padding="10dp"
+                android:text="Title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/icon"
                 app:layout_constraintTop_toTopOf="@+id/icon"
                 android:textColor="@color/white"
                 style="@style/AppText"/>
 
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Status"
-                app:layout_constraintBaseline_toBaselineOf="@+id/course"
-                app:layout_constraintStart_toEndOf="@+id/course"
-                app:layout_constraintTop_toTopOf="@+id/icon"
-                android:textColor="@color/white"
-                style="@style/AppText"/>
 
             <TextView
                 android:id="@+id/startDate"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="Start Date"
-                app:layout_constraintBaseline_toBaselineOf="@+id/course"
-                app:layout_constraintStart_toEndOf="@+id/status"
+                app:layout_constraintBaseline_toBaselineOf="@+id/title"
+                app:layout_constraintStart_toEndOf="@+id/title"
                 app:layout_constraintTop_toTopOf="@+id/icon"
                 android:textColor="@color/white"
                 style="@style/AppText"/>
 
             <TextView
                 android:id="@+id/endDate"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="End Date"
-                app:layout_constraintBaseline_toBaselineOf="@+id/course"
+                app:layout_constraintBaseline_toBaselineOf="@+id/title"
                 app:layout_constraintStart_toEndOf="@+id/startDate"
                 app:layout_constraintTop_toTopOf="@+id/icon"
                 android:textColor="@color/white"
@@ -90,6 +80,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

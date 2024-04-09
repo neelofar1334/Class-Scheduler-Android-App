@@ -5,7 +5,7 @@
     <string name="assessments">Assessments</string>
     <string-array name="assessment_types">
         <item>Choose Assessment Type</item> <!-- hint -->
-        <item>Objective Assessment</item>
-        <item>Performance Assessment</item>
+        <item>Objective</item>
+        <item>Performance</item>
     </string-array>
 </resources>

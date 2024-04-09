@@ -53,7 +53,6 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     }
 
     static class CourseViewHolder extends RecyclerView.ViewHolder {
-        private final TextView termTextView;
         private final TextView courseTextView;
         private final TextView statusTextView;
         private final TextView startDateTextView;
@@ -64,7 +63,6 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         CourseViewHolder(View itemView, Context context) {
             super(itemView);
             this.context = context;
-            termTextView = itemView.findViewById(R.id.term);
             courseTextView = itemView.findViewById(R.id.course);
             statusTextView = itemView.findViewById(R.id.status);
             startDateTextView = itemView.findViewById(R.id.startDate);
@@ -74,7 +72,6 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         void bind(final Courses current) {
             Log.d("CourseListAdapter", "Binding course: " + current.getTitle() + ", Term: " + current.getTermName());
 
-            termTextView.setText(current.getTermName());
             courseTextView.setText(current.getTitle());
             statusTextView.setText(current.getStatus());
             startDateTextView.setText(current.getStartDate());

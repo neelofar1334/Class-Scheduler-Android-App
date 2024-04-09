@@ -34,6 +34,7 @@ public class Repository {
         AppDatabase db = AppDatabase.getDatabase(application);
         mCourseDAO = db.coursesDao();
         mTermsDAO = db.termsDAO();
+        mAssessmentsDAO = db.assessmentDao();
         this.applicationContext = application.getApplicationContext();
     }
 
@@ -83,6 +84,10 @@ public class Repository {
 
 
     //Assessments
+    public LiveData<List<Assessments>> getAllAssessments() {
+        return mAssessmentsDAO.getAllAssessments();
+    }
+
     public void insert(final Assessments assessments) {
         databaseExecutor.execute(() -> {
             mAssessmentsDAO.insert(assessments);

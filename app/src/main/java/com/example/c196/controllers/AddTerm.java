@@ -14,6 +14,7 @@ import com.example.c196.DAO.CoursesDAO;
 import com.example.c196.DAO.TermsDAO;
 import com.example.c196.R;
 import com.example.c196.database.AppDatabase;
+import com.example.c196.database.Repository;
 import com.example.c196.entities.Assessments;
 import com.example.c196.entities.Courses;
 import com.example.c196.entities.Terms;
@@ -29,12 +30,15 @@ public class AddTerm extends MenuActivity {
     private Button startDatePickerButton, endDatePickerButton, submitButton, cancelButton;
     private EditText titleEditText;
     private String startDate, endDate;
-    private final ExecutorService databaseExecutor = Executors.newSingleThreadExecutor();
+    private Repository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_term);
+
+        //initialize the repository
+        repository = new Repository(getApplication());
 
         //initialize UI components
         startDatePickerButton = findViewById(R.id.startDatePicker);
@@ -88,22 +92,16 @@ public class AddTerm extends MenuActivity {
             return;
         }
 
-        databaseExecutor.execute(() -> {
-            Terms term = new Terms();
-            term.setTitle(title);
-            term.setStartDate(startDate);
-            term.setEndDate(endDate);
+        //create a new Term object
+        Terms term = new Terms();
+        term.setTitle(title);
+        term.setStartDate(startDate);
+        term.setEndDate(endDate);
 
-            AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
-            TermsDAO dao = db.termsDAO();
-            Log.d("SaveTerm", "Attempting to save term: " + title);
-            db.termsDAO().insert(term);
-            Log.d("SaveTerm", "Term saved successfully.");
+        //use the repository to insert the new term
+        repository.insert(term);
 
-            runOnUiThread(() -> {
-                Toast.makeText(AddTerm.this, "Term added successfully", Toast.LENGTH_SHORT).show();
-                finish();
-            });
-        });
+        Toast.makeText(this, "Term added successfully", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }
