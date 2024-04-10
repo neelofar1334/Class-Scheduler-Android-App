@@ -20,8 +20,9 @@ public interface CoursesDAO {
     @Query("SELECT * FROM courses WHERE title = :title LIMIT 1")
     Courses getCourseByTitle(String title);
 
-    @Query("SELECT * FROM courses WHERE courseID = :courseID ORDER BY courseID ASC")
-    LiveData<List<Courses>> getCourseById(int courseID);
+    @Query("SELECT * FROM courses WHERE courseId = :courseId LIMIT 1")
+    LiveData<Courses> getCourseById(int courseId);
+
 
     @Query("SELECT * FROM courses")
     LiveData<List<Courses>> getAllCourses();

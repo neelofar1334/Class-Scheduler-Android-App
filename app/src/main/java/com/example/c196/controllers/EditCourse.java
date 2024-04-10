@@ -13,6 +13,7 @@ import com.example.c196.DAO.AssessmentsDAO;
 import com.example.c196.DAO.CoursesDAO;
 import com.example.c196.R;
 import com.example.c196.database.AppDatabase;
+import com.example.c196.database.Repository;
 import com.example.c196.entities.Courses;
 
 import java.text.SimpleDateFormat;
@@ -20,11 +21,12 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class EditCourse extends MenuActivity {
-
     private Button startDatePickerButton, endDatePickerButton, submitButton, cancelButton;
     private EditText titleEditText, statusEditText, instructorNameEditText, instructorEmailEditText, instructorPhoneEditText;
     private String startDate, endDate;
+    private Repository repository;
     private Courses course;
+    private int courseId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +47,35 @@ public class EditCourse extends MenuActivity {
         setupDatePickerButtons();
         setupSubmitButton();
         setupCancelButton();
+        initializeRepository();
+        loadData();
+    }
 
-        //load data from existing course
-        int courseId = getIntent().getIntExtra("courseId", -1);
+    private void initializeRepository() {
+        repository = new Repository(getApplication());
+    }
+
+    private void loadData() {
+        courseId = getIntent().getIntExtra("courseId", -1);
         if (courseId != -1) {
-            loadCourseData(courseId);
+            repository.getCourseById(courseId).observe(this, course -> {
+                if (course != null) {
+                    this.course = course;
+                    titleEditText.setText(course.getTitle());
+                    statusEditText.setText(course.getStatus());
+                    instructorNameEditText.setText(course.getInstructorName());
+                    instructorEmailEditText.setText(course.getInstructorEmail());
+                    instructorPhoneEditText.setText(course.getInstructorPhone());
+                    //dates
+                    startDate = course.getStartDate();
+                    endDate = course.getEndDate();
+                    startDatePickerButton.setText("Start Date: " + startDate);
+                    endDatePickerButton.setText("End Date: " + endDate);
+                } else {
+                    Toast.makeText(this, "Course not found", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
         } else {
             Toast.makeText(this, "Invalid Course ID", Toast.LENGTH_SHORT).show();
             finish();
@@ -87,46 +113,22 @@ public class EditCourse extends MenuActivity {
         cancelButton.setOnClickListener(v -> finish());
     }
 
-    private void loadCourseData(int courseId) {
-        AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
-        CoursesDAO coursesDAO = db.coursesDao();
-        coursesDAO.getCourseById(courseId).observe(this, courses -> {
-            if (course != null) {
-                titleEditText.setText(course.getTitle());
-                statusEditText.setText(course.getStatus());
-                instructorNameEditText.setText(course.getInstructorName());
-                instructorEmailEditText.setText(course.getInstructorEmail());
-                instructorPhoneEditText.setText(course.getInstructorPhone());
-            }
-        });
-    }
-
     private void saveCourse() {
-        String title = titleEditText.getText().toString().trim();
-        String status = statusEditText.getText().toString().trim();
-        String instructorName = instructorNameEditText.getText().toString().trim();
-        String instructorEmail = instructorEmailEditText.getText().toString().trim();
-        String instructorPhone = instructorPhoneEditText.getText().toString().trim();
+        if (course != null) {
+            course.setTitle(titleEditText.getText().toString().trim());
+            course.setStatus(statusEditText.getText().toString().trim());
+            course.setInstructorName(instructorNameEditText.getText().toString().trim());
+            course.setInstructorEmail(instructorEmailEditText.getText().toString().trim());
+            course.setInstructorPhone(instructorPhoneEditText.getText().toString().trim());
 
-        if (title.isEmpty() || status.isEmpty() || instructorName.isEmpty() || instructorEmail.isEmpty() || instructorPhone.isEmpty()) {
-            Toast.makeText(this, "Please complete all fields", Toast.LENGTH_SHORT).show();
-            return;
+            course.setStartDate(startDate);
+            course.setEndDate(endDate);
+
+            repository.update(course);
+            Toast.makeText(EditCourse.this, "Course updated successfully", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Toast.makeText(this, "Unable to save: No course data", Toast.LENGTH_SHORT).show();
         }
-
-        course.setTitle(title);
-        course.setStatus(status);
-        course.setInstructorName(instructorName);
-        course.setInstructorEmail(instructorEmail);
-        course.setInstructorPhone(instructorPhone);
-
-        new Thread(() -> {
-            AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
-            CoursesDAO dao = db.coursesDao();
-            dao.update(course);
-            runOnUiThread(() -> {
-                Toast.makeText(EditCourse.this, "Course updated successfully", Toast.LENGTH_SHORT).show();
-                finish();
-            });
-        }).start();
     }
 }

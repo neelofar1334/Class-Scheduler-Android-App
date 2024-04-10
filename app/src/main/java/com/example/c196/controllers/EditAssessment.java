@@ -19,7 +19,9 @@ import android.widget.Toast;
 import com.example.c196.DAO.AssessmentsDAO;
 import com.example.c196.R;
 import com.example.c196.database.AppDatabase;
+import com.example.c196.database.Repository;
 import com.example.c196.entities.Assessments;
+import com.example.c196.entities.Courses;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,6 +36,8 @@ public class EditAssessment extends MenuActivity {
     private EditText titleEditText;
     private Spinner typeSpinner;
     private Assessments assessment;
+    private Repository repository;
+    private int assessmentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,21 +56,41 @@ public class EditAssessment extends MenuActivity {
         setupDatePickerButtons();
         setupSubmitButton();
         setupCancelButton();
-
-        //load data from existing assessment
-        int assessmentId = getIntent().getIntExtra("assessmentId", -1);
-        if (assessmentId != -1) {
-            loadAssessmentData(assessmentId);
-        } else {
-            Toast.makeText(this, "Invalid Assessment ID", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        initializeRepository();
+        loadData();
     }
 
     private void setupSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.assessment_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(adapter);
+    }
+
+    private void initializeRepository() {
+        repository = new Repository(getApplication());
+    }
+
+    private void loadData() {
+        assessmentId = getIntent().getIntExtra("assessmentId", -1);
+        if (assessmentId != -1) {
+            repository.getAssessmentById(assessmentId).observe(this, assessment -> {
+                if (assessment != null) {
+                    this.assessment = assessment;
+                    titleEditText.setText(assessment.getTitle());
+                    ArrayAdapter<String> adapter = (ArrayAdapter<String>) typeSpinner.getAdapter();
+                    int spinnerPosition = adapter.getPosition(assessment.getType());
+                    typeSpinner.setSelection(spinnerPosition);
+                    startDatePickerButton.setText("Start Date: " + assessment.getStartDate());
+                    endDatePickerButton.setText("End Date: " + assessment.getEndDate());
+                } else {
+                    Toast.makeText(this, "Assessment not found", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
+        } else {
+            Toast.makeText(this, "Invalid Assessment ID", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
 
@@ -102,48 +126,27 @@ public class EditAssessment extends MenuActivity {
         cancelButton.setOnClickListener(v -> finish());
     }
 
-    private void loadAssessmentData(int assessmentId) {
-        AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
-        AssessmentsDAO assessmentsDAO = db.assessmentDao();
-        assessmentsDAO.getAssessmentByID(assessmentId).observe(this, assessment -> {
-            if (assessment != null) {
-                titleEditText.setText(assessment.getTitle());
-
-                // Safer casting approach
-                SpinnerAdapter adapter = typeSpinner.getAdapter();
-                if (adapter instanceof ArrayAdapter) {
-                    ArrayAdapter<String> stringArrayAdapter = (ArrayAdapter<String>) adapter;
-                    int spinnerPosition = stringArrayAdapter.getPosition(assessment.getType());
-                    typeSpinner.setSelection(spinnerPosition);
-                }
-
-                startDatePickerButton.setText("Start Date: " + assessment.getStartDate());
-                endDatePickerButton.setText("End Date: " + assessment.getEndDate());
-            }
-        });
-    }
-
-
     private void saveAssessment() {
-        String title = titleEditText.getText().toString().trim();
-        String type = typeSpinner.getSelectedItem().toString();
-        if (title.isEmpty() || type.equals(getResources().getStringArray(R.array.assessment_types)[0])) {
-            Toast.makeText(this, "Please complete all fields", Toast.LENGTH_SHORT).show();
-            return;
+        if (assessment != null) {
+            String title = titleEditText.getText().toString().trim();
+            String type = typeSpinner.getSelectedItem().toString();
+
+            if (title.isEmpty()) {
+                Toast.makeText(this, "Please complete all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            assessment.setTitle(title);
+            assessment.setType(type);
+            assessment.setStartDate(startDate);
+            assessment.setEndDate(endDate);
+
+            repository.update(assessment);
+            Toast.makeText(EditAssessment.this, "Assessment updated successfully", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Toast.makeText(this, "Unable to save: No assessment data", Toast.LENGTH_SHORT).show();
         }
-
-        assessment.setTitle(title);
-        assessment.setType(type);
-
-        new Thread(() -> {
-            AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
-            db.assessmentDao().update(assessment);
-            runOnUiThread(() -> {
-                Toast.makeText(EditAssessment.this, "Assessment updated successfully", Toast.LENGTH_SHORT).show();
-                finish();
-            });
-        }).start();
     }
-
 
 }

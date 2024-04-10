@@ -25,8 +25,8 @@ public interface TermsDAO {
     @Query("SELECT * FROM terms WHERE `termTitle` = :title LIMIT 1")
     Terms getTermTitle(String title);
 
-    @Query("SELECT * FROM terms WHERE termID = :termID ORDER BY termID ASC")
-    LiveData<List<Terms>> getTermById(int termID);
+    @Query("SELECT * FROM terms WHERE termID = :termID LIMIT 1")
+    LiveData<Terms> getTermById(int termID);
 
     //inserts new term
     @Insert(onConflict = OnConflictStrategy.ABORT)
