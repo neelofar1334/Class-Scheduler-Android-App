@@ -2,15 +2,18 @@ package View;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.c196.R;
 import com.example.c196.controllers.TermDetail;
+import com.example.c196.entities.Courses;
 import com.example.c196.entities.Terms;
 import com.example.c196.viewmodel.TermViewModel;
 
@@ -20,19 +23,27 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
     private List<Terms> mTerms;
     private LayoutInflater mInflater;
     private Context context;
+    private OnTermListener listener;
+
+    //for edit and delete buttons
+    public interface OnTermListener {
+        void onEditClicked(int position);
+        void onDeleteClicked(int position);
+    }
 
     // Constructor
-    public TermListAdapter(Context context, List<Terms> terms) {
+    public TermListAdapter(Context context, List<Terms> terms, OnTermListener listener) {
         this.context = context;
         this.mTerms = terms;
         this.mInflater = LayoutInflater.from(context);
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public TermViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.term_recycler_view_row, parent, false);
-        return new TermViewHolder(itemView, context);
+        return new TermViewHolder(itemView, listener);
     }
 
     @Override
@@ -52,22 +63,44 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
         notifyDataSetChanged();
     }
 
+    //for TermList activity
+    public Terms getTermAtPosition(int position) {
+        return mTerms.get(position);
+    }
+
     static class TermViewHolder extends RecyclerView.ViewHolder {
         private final TextView titleTextView;
         private final TextView startDateTextView;
         private final TextView endDateTextView;
-        private final Context context;
+        Button editButton, deleteButton;
 
         //View Holder for Term List
-        TermViewHolder(View itemView, Context context) {
+        TermViewHolder(View itemView, OnTermListener listener) {
             super(itemView);
-            this.context = context;
             titleTextView = itemView.findViewById(R.id.title);
             startDateTextView = itemView.findViewById(R.id.startDate);
             endDateTextView = itemView.findViewById(R.id.endDate);
+            editButton = itemView.findViewById(R.id.editButton);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
+            //setup click listeners
+            editButton.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onEditClicked(position);
+                }
+            });
+
+            deleteButton.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onDeleteClicked(position);
+                }
+            });
         }
 
         void bind(final Terms current) {
+            Log.d("TermListAdapter", "Binding term: " + current.getTitle());
+
             titleTextView.setText(current.getTitle());
             startDateTextView.setText(current.getStartDate());
             endDateTextView.setText(current.getEndDate());

@@ -18,31 +18,13 @@
     <item android:id="@+id/action_courseList"
         android:title="Course List" />
 
-    <item android:id="@+id/action_addCourse"
-        android:title="Add Course" />
-
-    <item android:id="@+id/action_editCourse"
-        android:title="Edit Course" />
-
     <item android:id="@+id/action_assessmentsList"
         android:title="Assessments List" />
-
-    <item android:id="@+id/action_addAssessment"
-        android:title="Add Assessment" />
-
-    <item android:id="@+id/action_editAssessment"
-        android:title="Edit Assessment" />
 
     <item android:id="@+id/action_termList"
         android:title="Term List" />
 
     <item android:id="@+id/action_addTerm"
         android:title="Add Term" />
-
-    <item android:id="@+id/action_editTerm"
-        android:title="Edit Term" />
-
-    <item android:id="@+id/action_notes"
-        android:title="Notes" />
 
 </menu>

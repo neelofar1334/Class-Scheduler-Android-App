@@ -8,12 +8,12 @@ import com.example.c196.DAO.Relationships.TermsWithCourses;
 import com.example.c196.DAO.TermsDAO;
 import com.example.c196.database.AppDatabase;
 import com.example.c196.database.Repository;
+import com.example.c196.entities.Courses;
 import com.example.c196.entities.Terms;
 
 import java.util.List;
 
 public class TermViewModel extends AndroidViewModel {
-    private TermsDAO termsDAO;
     private LiveData<List<TermsWithCourses>> termsWithCourses;
     private LiveData<List<Terms>> mAllTerms;
     private Repository repository;
@@ -29,5 +29,8 @@ public class TermViewModel extends AndroidViewModel {
     }
     public LiveData<List<TermsWithCourses>> getTermsWithCourses() {
         return termsWithCourses;
+    }
+    public void delete(Terms terms) {
+        repository.delete(terms);
     }
 }

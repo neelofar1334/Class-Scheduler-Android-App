@@ -80,8 +80,11 @@ public class EditAssessment extends MenuActivity {
                     ArrayAdapter<String> adapter = (ArrayAdapter<String>) typeSpinner.getAdapter();
                     int spinnerPosition = adapter.getPosition(assessment.getType());
                     typeSpinner.setSelection(spinnerPosition);
-                    startDatePickerButton.setText("Start Date: " + assessment.getStartDate());
-                    endDatePickerButton.setText("End Date: " + assessment.getEndDate());
+                    //dates
+                    startDate = assessment.getStartDate();
+                    endDate = assessment.getEndDate();
+                    startDatePickerButton.setText("Start Date: " + startDate);
+                    endDatePickerButton.setText("End Date: " + endDate);
                 } else {
                     Toast.makeText(this, "Assessment not found", Toast.LENGTH_SHORT).show();
                     finish();

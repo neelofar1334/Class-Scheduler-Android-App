@@ -31,24 +31,12 @@ public class MenuActivity extends AppCompatActivity {
             navigateToActivity(MainActivity.class);
         } else if (itemId == R.id.action_courseList) {
             navigateToActivity(CourseList.class);
-        } else if (itemId == R.id.action_addCourse) {
-            navigateToActivity(AddCourse.class);
-        } else if (itemId == R.id.action_editCourse) {
-            navigateToActivity(EditCourse.class);
-        } else if (itemId == R.id.action_assessmentsList) {
+        }  else if (itemId == R.id.action_assessmentsList) {
             navigateToActivity(AssessmentList.class);
-        } else if (itemId == R.id.action_addAssessment) {
-            navigateToActivity(AddAssessment.class);
-        } else if (itemId == R.id.action_editAssessment) {
-            navigateToActivity(EditAssessment.class);
-        } else if (itemId == R.id.action_termList) {
+        }  else if (itemId == R.id.action_termList) {
             navigateToActivity(TermList.class);
         } else if (itemId == R.id.action_addTerm) {
             navigateToActivity(AddTerm.class);
-        } else if (itemId == R.id.action_editTerm) {
-            navigateToActivity(EditTerm.class);
-        } else if (itemId == R.id.action_notes) {
-            navigateToActivity(Notes.class);
         } else {
             return super.onOptionsItemSelected(item);
         }

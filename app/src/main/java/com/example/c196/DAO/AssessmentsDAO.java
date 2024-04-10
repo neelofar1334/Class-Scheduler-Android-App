@@ -15,11 +15,6 @@ import java.util.List;
 
 @Dao
 public interface AssessmentsDAO {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Assessments assessment);
-
-    @Update
-    void update(Assessments assessment);
 
     //retrieves single assessment by title
     @Query("SELECT * FROM assessments WHERE title = :title LIMIT 1")
@@ -33,6 +28,12 @@ public interface AssessmentsDAO {
 
     @Query("SELECT * FROM assessments WHERE assessmentId=:assessment ORDER BY assessmentId ASC")
     LiveData<List<Assessments>> getAssociatedAssessments(int assessment);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Assessments assessment);
+
+    @Update
+    void update(Assessments assessment);
 
     @Delete
     void delete(Assessments assessments);

@@ -25,4 +25,8 @@ public class AssessmentViewModel extends AndroidViewModel {
     public LiveData<List<Assessments>> getAllAssessments() {
         return allAssessments;
     }
+
+    public void delete(Assessments assessments) {
+        repository.delete(assessments);
+    }
 }

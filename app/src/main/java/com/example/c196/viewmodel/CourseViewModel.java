@@ -24,4 +24,8 @@ public class CourseViewModel extends AndroidViewModel {
     public LiveData<List<Courses>> getAllCourses() {
         return allCourses;
     }
+
+    public void delete(Courses course) {
+        repository.delete(course);
+    }
 }
