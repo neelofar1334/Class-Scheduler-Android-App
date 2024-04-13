@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.c196.DAO.CoursesDAO;
 import com.example.c196.database.Repository;
 import com.example.c196.entities.Courses;
 
@@ -23,6 +24,14 @@ public class CourseViewModel extends AndroidViewModel {
 
     public LiveData<List<Courses>> getAllCourses() {
         return allCourses;
+    }
+
+    public LiveData<Courses> getCourseById(int courseId) {
+        return repository.getCourseById(courseId);
+    }
+
+    public LiveData<List<Courses>> getCoursesByTermId(int termId) {
+        return repository.getCoursesByTermId(termId);
     }
 
     public void delete(Courses course) {

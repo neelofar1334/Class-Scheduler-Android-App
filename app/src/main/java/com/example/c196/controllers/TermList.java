@@ -47,6 +47,14 @@ public class TermList extends MenuActivity implements TermListAdapter.OnTermList
             adapter.setTerms(terms);
         });
     }
+
+    @Override
+    public void onViewClicked(int position) {
+        Terms terms = adapter.getTermAtPosition(position);
+        Intent intent = new Intent(TermList.this, TermDetail.class);
+        intent.putExtra("termId", terms.getTermID());
+        startActivity(intent);
+    }
     @Override
     public void onEditClicked(int position) {
         Terms terms = adapter.getTermAtPosition(position);

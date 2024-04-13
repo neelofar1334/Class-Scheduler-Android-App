@@ -27,8 +27,8 @@ public class TermViewModel extends AndroidViewModel {
    public LiveData<List<Terms>> getAllTerms() {
         return mAllTerms;
     }
-    public LiveData<List<TermsWithCourses>> getTermsWithCourses() {
-        return termsWithCourses;
+    public LiveData<Terms> getTermById(int termId) {
+        return repository.getTermById(termId);
     }
     public void delete(Terms terms) {
         repository.delete(terms);

@@ -26,19 +26,29 @@ public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAd
     private LayoutInflater mInflater;
     private Context context;
     private final onAssessmentListener listener;
+    private boolean showButtons; //for showing or hiding the edit, view, and delete buttons in the recyclerView row
 
     //for edit and delete buttons
     public interface onAssessmentListener {
         void onEditClicked(int position);
         void onDeleteClicked(int position);
+        void onViewClicked(int position); //for viewing course details
     }
 
     // Constructor
-    public AssessmentListAdapter(Context context, List<Assessments> assessments, onAssessmentListener listener) {
+    public AssessmentListAdapter(Context context, onAssessmentListener listener, boolean showButtons) {
         this.context = context;
-        this.mAssessments = assessments;
         this.mInflater = LayoutInflater.from(context);
-        this.listener = listener;
+        this.showButtons = showButtons;
+        this.mAssessments = new ArrayList<>();  // Initialize the list here
+        this.listener = (listener != null) ? listener : new onAssessmentListener() {
+            @Override
+            public void onEditClicked(int position) { }
+            @Override
+            public void onDeleteClicked(int position) { }
+            @Override
+            public void onViewClicked(int position) { }
+        };
     }
 
     @NonNull
@@ -52,6 +62,16 @@ public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAd
     public void onBindViewHolder(@NonNull AssessmentViewHolder holder, int position) {
         Assessments current = mAssessments.get(position);
         holder.bind(current);
+        //set button visibility based on this
+        if (!showButtons) {
+            holder.editButton.setVisibility(View.GONE);
+            holder.deleteButton.setVisibility(View.GONE);
+            holder.viewButton.setVisibility(View.GONE);
+        } else {
+            holder.editButton.setVisibility(View.VISIBLE);
+            holder.deleteButton.setVisibility(View.VISIBLE);
+            holder.viewButton.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -61,7 +81,9 @@ public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAd
 
     public void setAssessments(List<Assessments> assessments) {
         mAssessments.clear();
-        mAssessments.addAll(assessments);
+        if (assessments != null) {
+            mAssessments.addAll(assessments);
+        }
         notifyDataSetChanged();
     }
 
@@ -75,7 +97,7 @@ public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAd
         private final TextView typeTextView;
         private final TextView startDateTextView;
         private final TextView endDateTextView;
-        Button editButton, deleteButton;
+        Button editButton, deleteButton, viewButton;
 
         // Constructor for ViewHolder
         AssessmentViewHolder(View itemView, onAssessmentListener listener) {
@@ -86,6 +108,7 @@ public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAd
             endDateTextView = itemView.findViewById(R.id.endDate);
             editButton = itemView.findViewById(R.id.editButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
+            viewButton = itemView.findViewById(R.id.viewButton);
 
             //setup click listeners
             editButton.setOnClickListener(v -> {
@@ -101,6 +124,14 @@ public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAd
                     listener.onDeleteClicked(position);
                 }
             });
+
+            //view button click listener
+            viewButton.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onViewClicked(position);
+                }
+            });
         }
 
         void bind(final Assessments current) {
@@ -111,16 +142,6 @@ public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAd
             startDateTextView.setText(current.getStartDate());
             endDateTextView.setText(current.getEndDate());
 
-            itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    Intent intent = new Intent(v.getContext(), AssessmentDetail.class);
-                    intent.putExtra("title", current.getTitle());
-                    intent.putExtra("start date", current.getStartDate());
-                    intent.putExtra("end date", current.getEndDate());
-                    v.getContext().startActivity(intent);
-                }
-            });
         }
     }
 }

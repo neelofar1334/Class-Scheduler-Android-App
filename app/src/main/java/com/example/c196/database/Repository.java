@@ -57,9 +57,17 @@ public class Repository {
         databaseExecutor.execute(() -> mCourseDAO.delete(courses));
     }
 
-    //from coursesDAO
     public LiveData<Courses> getCourseById(int courseId) {
         return mCourseDAO.getCourseById(courseId);
+    }
+
+    public LiveData<List<Courses>> getCoursesByTermId(int termId) {
+        return mCourseDAO.getCoursesByTermId(termId);
+    }
+
+    //course validation
+    public boolean courseExists(int courseId) {
+        return mCourseDAO.courseExists(courseId);
     }
 
     //Terms
@@ -115,5 +123,9 @@ public class Repository {
 
     public LiveData<Assessments> getAssessmentById(int assessmentId) {
         return mAssessmentsDAO.getAssessmentByID(assessmentId);
+    }
+
+    public AssessmentsDAO getAssessmentsDAO() {
+        return mAssessmentsDAO;
     }
 }

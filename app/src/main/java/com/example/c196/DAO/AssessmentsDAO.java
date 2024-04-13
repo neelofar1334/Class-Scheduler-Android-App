@@ -29,6 +29,9 @@ public interface AssessmentsDAO {
     @Query("SELECT * FROM assessments WHERE assessmentId=:assessment ORDER BY assessmentId ASC")
     LiveData<List<Assessments>> getAssociatedAssessments(int assessment);
 
+    @Query("SELECT * FROM assessments WHERE courseId = :courseId")
+    LiveData<List<Assessments>> getAssessmentsBycourseId(int courseId);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Assessments assessment);
 

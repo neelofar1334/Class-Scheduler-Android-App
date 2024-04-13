@@ -7,12 +7,15 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-@Entity(tableName = "Courses")
+@Entity(tableName = "Courses",
+        foreignKeys = @ForeignKey(entity = Terms.class,
+                parentColumns = "termID",
+                childColumns = "termId",
+                onDelete = ForeignKey.CASCADE))
 public class Courses {
-
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "courseID")
-    private int courseID;
+    @ColumnInfo(name = "courseId")
+    private int courseId;
     @ColumnInfo(name = "title")
     private String title;
     @ColumnInfo(name = "start")
@@ -20,19 +23,17 @@ public class Courses {
     @ColumnInfo(name = "end")
     private String endDate;
     @ColumnInfo(name = "status")
-    private String status; // "In Progress", "Completed", "Dropped", "Plan to take"
+    private String status; // TODO spinner "In Progress", "Completed", "Dropped", "Plan to take"
     @ColumnInfo(name = "instructorName")
     private String instructorName;
     @ColumnInfo(name = "instructorEmail")
     private String instructorEmail;
     @ColumnInfo(name = "instructorPhone")
     private String instructorPhone;
-    @ColumnInfo(name = "termName")
-    private String termName;
     @ColumnInfo(name = "termId")
-    private int termId; //TODO should be a foreign key
+    private int termId; //foreign key linked to Term Entity
 
-    public Courses(String title, String startDate, String endDate, String status, String instructorName, String instructorEmail, String instructorPhone, String termName, int termId) {
+    public Courses(String title, String startDate, String endDate, String status, String instructorName, String instructorEmail, String instructorPhone, int termId) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -40,7 +41,6 @@ public class Courses {
         this.instructorName = instructorName;
         this.instructorEmail = instructorEmail;
         this.instructorPhone = instructorPhone;
-        this.termName = termName;
         this.termId = termId;
     }
 
@@ -48,12 +48,12 @@ public class Courses {
     public Courses() {
     }
 
-    public int getCourseID() {
-        return courseID;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setCourseID(int courseID) {
-        this.courseID = courseID;
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     public String getTitle() {
@@ -110,14 +110,6 @@ public class Courses {
 
     public void setInstructorPhone(String instructorPhone) {
         this.instructorPhone = instructorPhone;
-    }
-
-    public String getTermName() {
-        return termName;
-    }
-
-    public void setTermName(String termName) {
-        this.termName = termName;
     }
 
     public int getTermId() {

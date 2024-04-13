@@ -6,7 +6,7 @@
     "entities": [
       {
         "tableName": "assessments",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`assessmentID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `courseID` INTEGER NOT NULL, `title` TEXT, `type` TEXT, `Start Date` TEXT, `End Date` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`assessmentID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `courseId` INTEGER NOT NULL, `title` TEXT, `type` TEXT, `Start Date` TEXT, `End Date` TEXT)",
         "fields": [
           {
             "fieldPath": "assessmentId",
@@ -16,7 +16,7 @@
           },
           {
             "fieldPath": "courseId",
-            "columnName": "courseID",
+            "columnName": "courseId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -56,11 +56,11 @@
       },
       {
         "tableName": "courses",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`courseID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `start` TEXT, `end` TEXT, `status` TEXT, `Term Name` TEXT, `termId` INTEGER NOT NULL, FOREIGN KEY(`termId`) REFERENCES `terms`(`termID`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`courseId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `start` TEXT, `end` TEXT, `status` TEXT, `Term Name` TEXT, `termId` INTEGER NOT NULL, FOREIGN KEY(`termId`) REFERENCES `terms`(`termID`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
-            "fieldPath": "courseID",
-            "columnName": "courseID",
+            "fieldPath": "courseId",
+            "columnName": "courseId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -104,7 +104,7 @@
         "primaryKey": {
           "autoGenerate": true,
           "columnNames": [
-            "courseID"
+            "courseId"
           ]
         },
         "indices": [],
@@ -124,7 +124,7 @@
       },
       {
         "tableName": "terms",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`termID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `Term Name` TEXT, `Term Start` TEXT, `Term End` TEXT, `courseID` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`termID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `Term Name` TEXT, `Term Start` TEXT, `Term End` TEXT, `courseId` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "termID",
@@ -151,8 +151,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "courseID",
-            "columnName": "courseID",
+            "fieldPath": "courseId",
+            "columnName": "courseId",
             "affinity": "INTEGER",
             "notNull": true
           }

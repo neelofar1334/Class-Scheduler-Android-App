@@ -16,19 +16,19 @@ import java.util.List;
 @Dao
 public interface CoursesDAO {
 
-    //retrieves single course by title
-    @Query("SELECT * FROM courses WHERE title = :title LIMIT 1")
-    Courses getCourseByTitle(String title);
-
-    @Query("SELECT * FROM courses WHERE courseId = :courseId LIMIT 1")
+    @Query("SELECT * FROM courses WHERE courseId = :courseId")
     LiveData<Courses> getCourseById(int courseId);
 
 
     @Query("SELECT * FROM courses")
     LiveData<List<Courses>> getAllCourses();
 
-    @Query("SELECT * FROM courses WHERE courseID=:course ORDER BY courseID ASC")
-    LiveData<List<Courses>> getAssociatedCourses(int course);
+    @Query("SELECT * FROM Courses WHERE termId = :termId")
+    LiveData<List<Courses>> getCoursesByTermId(int termId);
+
+    //course validation
+    @Query("SELECT EXISTS(SELECT 1 FROM Courses WHERE courseId = :courseId)")
+    boolean courseExists(int courseId);
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     void insert(Courses courses);

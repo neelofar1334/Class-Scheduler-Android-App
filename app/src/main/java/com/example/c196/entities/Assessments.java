@@ -2,15 +2,20 @@ package com.example.c196.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "Assessments")
+@Entity(tableName = "Assessments",
+        foreignKeys = @ForeignKey(entity = Courses.class,
+                parentColumns = "courseId",
+                childColumns = "courseId",
+                onDelete = ForeignKey.CASCADE))
 public class Assessments {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "assessmentID")
     private int assessmentId;
-    @ColumnInfo(name = "courseID")
-    private int courseId;
+    @ColumnInfo(name = "courseId")
+    private int courseId; //foreign key linked to course entity
     @ColumnInfo(name = "title")
     private String title;
     @ColumnInfo(name = "type")

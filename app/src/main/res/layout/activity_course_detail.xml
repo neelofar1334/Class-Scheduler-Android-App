@@ -1,9 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".controllers.CourseDetail">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Course Info -->
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Course Detail"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/AppTextView"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <!-- Column 1 -->
+        <TextView
+            android:id="@+id/courseTitleLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Course Title"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
+            android:textSize="15sp"
+            style="@style/AppEditText"/>
+
+        <TextView
+            android:id="@+id/courseStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            app:layout_constraintTop_toBottomOf="@+id/courseTitleLabel"
+            app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
+            android:textSize="15sp"
+            style="@style/AppEditText"/>
+
+        <TextView
+            android:id="@+id/courseStartDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Start Date"
+            app:layout_constraintTop_toBottomOf="@+id/courseStatus"
+            app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
+            android:textSize="15sp"
+            style="@style/AppEditText"/>
+
+        <ImageView
+            android:id="@+id/notifyStart"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/courseStatus"
+            app:layout_constraintStart_toStartOf="@id/courseStartDate"
+            android:contentDescription="bell"
+            app:srcCompat="@drawable/baseline_add_alert_24"
+            app:tint="@color/accent_green" />
+
+
+        <!-- Column 2 -->
+
+        <ImageView
+            android:id="@+id/notifyEnd"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/textView"
+            app:layout_constraintStart_toStartOf="@id/courseEndDate"
+            android:contentDescription="bell"
+            app:srcCompat="@drawable/baseline_add_alert_24"
+            app:tint="@color/accent_green" />
+
+        <TextView
+            android:id="@+id/courseEndDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="End Date"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
+            app:layout_constraintEnd_toEndOf="@+id/guidelineRight"
+            android:textSize="15sp"
+            style="@style/AppEditText"/>
+
+        <TextView
+            android:id="@+id/instructorName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Instructor Name"
+            app:layout_constraintTop_toBottomOf="@+id/courseEndDate"
+            app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
+            app:layout_constraintEnd_toEndOf="@+id/guidelineRight"
+            android:textSize="15sp"
+            style="@style/AppEditText"/>
+
+        <TextView
+            android:id="@+id/instructorEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Instructor Email"
+            app:layout_constraintTop_toBottomOf="@+id/instructorName"
+            app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
+            app:layout_constraintEnd_toEndOf="@+id/guidelineRight"
+            android:textSize="15sp"
+            style="@style/AppEditText"/>
+
+        <TextView
+            android:id="@+id/instructorPhone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Instructor Phone"
+            app:layout_constraintTop_toBottomOf="@+id/instructorEmail"
+            app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
+            app:layout_constraintEnd_toEndOf="@+id/guidelineRight"
+            android:textSize="15sp"
+            style="@style/AppEditText"/>
+
+        <!-- Assessment Info -->
+        <TextView
+            android:id="@+id/assessmentTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Associated Assessments"
+            app:layout_constraintTop_toBottomOf="@+id/instructorPhone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/AppTextView"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/assessmentsList_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/assessmentTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/addAssessmentButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Add an Assessment for This Course"
+            app:layout_constraintTop_toBottomOf="@+id/assessmentsList_recycler_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/AppButton"
+            app:cornerRadius="0dp"/>
+
+        <!-- Note Info -->
+        <TextView
+            android:id="@+id/noteTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notes"
+            app:layout_constraintTop_toBottomOf="@+id/addAssessmentButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/AppTextView"/>
+
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Add"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/noteTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/shareButton"
+            style="@style/AppButton"
+            app:cornerRadius="0dp"/>
+
+        <Button
+            android:id="@+id/shareButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Share"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/noteTextView"
+            app:layout_constraintStart_toEndOf="@id/addButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/AppButton"
+            app:cornerRadius="0dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

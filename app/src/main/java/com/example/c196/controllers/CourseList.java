@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.example.c196.R;
 
@@ -28,27 +29,27 @@ public class CourseList extends MenuActivity implements CourseListAdapter.OnCour
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_list);
 
-        //initialize recyclerView and adapter
         RecyclerView recyclerView = findViewById(R.id.courses_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CourseListAdapter(this, new ArrayList<>(), this);
+
+        adapter = new CourseListAdapter(this, this, true); //true to show edit, view, delete buttons
         recyclerView.setAdapter(adapter);
 
-        //initialize ViewModel
         courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
-
-        //observe LiveData from ViewModel
         courseViewModel.getAllCourses().observe(this, courses -> {
-            //update the cached copy of the courses in the adapter.
-            adapter.setCourses(courses);
+            if (courses != null) {
+                adapter.setCourses(courses);
+            } else {
+                Toast.makeText(this, "No courses available", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     @Override
     public void onEditClicked(int position) {
         Courses course = adapter.getCourseAtPosition(position);
-        Intent intent = new Intent(CourseList.this, EditCourse.class);
-        intent.putExtra("courseId", course.getCourseID());
+        Intent intent = new Intent(this, EditCourse.class);
+        intent.putExtra("courseId", course.getCourseId());
         startActivity(intent);
     }
 
@@ -56,6 +57,15 @@ public class CourseList extends MenuActivity implements CourseListAdapter.OnCour
     public void onDeleteClicked(int position) {
         Courses course = adapter.getCourseAtPosition(position);
         courseViewModel.delete(course);
+        Toast.makeText(this, "Course deleted", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onViewClicked(int position) {
+        Courses course = adapter.getCourseAtPosition(position);
+        Intent intent = new Intent(this, CourseDetail.class);
+        intent.putExtra("courseId", course.getCourseId());
+        startActivity(intent);
     }
 
     @Override

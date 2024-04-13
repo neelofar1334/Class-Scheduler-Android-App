@@ -21,6 +21,7 @@ import com.example.c196.R;
 import com.example.c196.database.AppDatabase;
 import com.example.c196.database.Repository;
 import com.example.c196.entities.Assessments;
+import com.example.c196.entities.Courses;
 import com.example.c196.entities.Terms;
 
 import java.text.SimpleDateFormat;
@@ -36,11 +37,15 @@ public class AddAssessment extends MenuActivity {
     private Spinner typeSpinner;
     private String startDate, endDate, assessmentType;
     private Repository repository;
+    private int courseId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_assessment);
+
+        //retrieve termId passed from TermDetail
+        courseId = getIntent().getIntExtra("courseId", -1);
 
         //initialize the repository
         repository = new Repository(getApplication());
@@ -126,22 +131,23 @@ public class AddAssessment extends MenuActivity {
     private void saveAssessment() {
         String title = titleEditText.getText().toString().trim();
         if (title.isEmpty() || assessmentType == null || startDate == null || endDate == null) {
-            Log.e("SaveAssessment", "Failed to save: One or more fields are empty.");
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-            return;
+        } else {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                boolean courseExists = repository.courseExists(courseId); //course validation
+                if (courseExists) {
+                    Assessments assessment = new Assessments(courseId, title, assessmentType, startDate, endDate);
+                    repository.insert(assessment);
+                    runOnUiThread(() -> {
+                        Toast.makeText(AddAssessment.this, "Assessment saved successfully", Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
+                } else {
+                    runOnUiThread(() -> Toast.makeText(AddAssessment.this, "Invalid course ID", Toast.LENGTH_SHORT).show());
+                }
+            });
         }
-
-        Assessments assessment = new Assessments();
-        assessment.setTitle(title);
-        assessment.setType(assessmentType);
-        assessment.setStartDate(startDate);
-        assessment.setEndDate(endDate);
-
-        //use the repository to insert the new term
-        repository.insert(assessment);
-
-        Toast.makeText(AddAssessment.this, "Assessment saved successfully", Toast.LENGTH_SHORT).show();
-        finish();
     }
 
 }

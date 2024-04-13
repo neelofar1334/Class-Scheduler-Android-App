@@ -8,7 +8,6 @@ import java.util.Date;
 
 @Entity(tableName = "Terms")
 public class Terms {
-
     @PrimaryKey(autoGenerate = true)
     @NonNull
     private int termID;
@@ -18,8 +17,8 @@ public class Terms {
     private String startDate;
     @ColumnInfo(name = "termEnd")
     private String endDate;
-    @ColumnInfo(name = "courseID")
-    private int courseID;
+    @ColumnInfo(name = "courseId")
+    private int courseId;
 
     public Terms(String title, String startDate, String endDate) {
         this.title = title;
@@ -30,7 +29,6 @@ public class Terms {
     //no args constructor for room framework
     public Terms() {
     }
-
     public int getTermID() {
         return termID;
     }
@@ -63,12 +61,12 @@ public class Terms {
         this.endDate = endDate;
     }
 
-    public int getCourseID() {
-        return courseID;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setCourseID(int courseID) {
-        this.courseID = courseID;
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 }
 

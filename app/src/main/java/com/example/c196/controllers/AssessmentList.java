@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.example.c196.R;
 import com.example.c196.entities.Assessments;
@@ -32,20 +33,28 @@ public class AssessmentList extends MenuActivity implements AssessmentListAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assessment_list);
 
-        //initialize recyclerView and adapter
         RecyclerView recyclerView = findViewById(R.id.assessments_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AssessmentListAdapter(this, new ArrayList<>(), this);
+
+        adapter = new AssessmentListAdapter(this, this, true); //true to show edit, view, delete buttons
         recyclerView.setAdapter(adapter);
 
-        //initialize ViewModel
         assessmentViewModel = new ViewModelProvider(this).get(AssessmentViewModel.class);
-
-        //observe LiveData from ViewModel
         assessmentViewModel.getAllAssessments().observe(this, assessments -> {
-            //update the cached copy of the assessments in the adapter.
-            adapter.setAssessments(assessments);
+            if (assessments != null) {
+                adapter.setAssessments(assessments);
+            } else {
+                Toast.makeText(this, "No assessments available", Toast.LENGTH_SHORT).show();
+            }
         });
+    }
+
+    @Override
+    public void onViewClicked(int position) {
+        Assessments assessments = adapter.getAssessmentAtPosition(position);
+        Intent intent = new Intent(AssessmentList.this, AssessmentDetail.class);
+        intent.putExtra("assessmentId", assessments.getAssessmentId());
+        startActivity(intent);
     }
 
     @Override

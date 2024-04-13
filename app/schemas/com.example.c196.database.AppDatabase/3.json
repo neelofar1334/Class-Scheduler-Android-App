@@ -6,7 +6,7 @@
     "entities": [
       {
         "tableName": "Assessments",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`assessmentID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `courseID` INTEGER NOT NULL, `title` TEXT, `type` TEXT, `startDate` TEXT, `endDate` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`assessmentID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `courseId` INTEGER NOT NULL, `title` TEXT, `type` TEXT, `startDate` TEXT, `endDate` TEXT)",
         "fields": [
           {
             "fieldPath": "assessmentId",
@@ -16,7 +16,7 @@
           },
           {
             "fieldPath": "courseId",
-            "columnName": "courseID",
+            "columnName": "courseId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -56,11 +56,11 @@
       },
       {
         "tableName": "Courses",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`courseID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `start` TEXT, `end` TEXT, `status` TEXT, `instructorName` TEXT, `instructorEmail` TEXT, `instructorPhone` TEXT, `termName` TEXT, `termId` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`courseId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `start` TEXT, `end` TEXT, `status` TEXT, `instructorName` TEXT, `instructorEmail` TEXT, `instructorPhone` TEXT, `termName` TEXT, `termId` INTEGER NOT NULL)",
         "fields": [
           {
-            "fieldPath": "courseID",
-            "columnName": "courseID",
+            "fieldPath": "courseId",
+            "columnName": "courseId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -122,7 +122,7 @@
         "primaryKey": {
           "autoGenerate": true,
           "columnNames": [
-            "courseID"
+            "courseId"
           ]
         },
         "indices": [],
@@ -130,7 +130,7 @@
       },
       {
         "tableName": "Terms",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`termID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `termTitle` TEXT, `termStart` TEXT, `termEnd` TEXT, `courseID` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`termID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `termTitle` TEXT, `termStart` TEXT, `termEnd` TEXT, `courseId` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "termID",
@@ -157,8 +157,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "courseID",
-            "columnName": "courseID",
+            "fieldPath": "courseId",
+            "columnName": "courseId",
             "affinity": "INTEGER",
             "notNull": true
           }

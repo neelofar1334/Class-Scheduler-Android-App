@@ -34,11 +34,15 @@ public class AddCourse extends MenuActivity {
     private EditText titleEditText, statusEditText, instructorNameEditText, instructorEmailEditText, instructorPhoneEditText;
     private String startDate, endDate;
     private Repository repository;
+    private int termId; //for term+course associations
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
+
+        //retrieve termId passed from TermDetail
+        termId = getIntent().getIntExtra("termId", -1);
 
         //initialize the repository
         repository = new Repository(getApplication());
@@ -103,22 +107,11 @@ public class AddCourse extends MenuActivity {
         if (title.isEmpty() || status.isEmpty() || instructorName.isEmpty() || instructorEmail.isEmpty() || instructorPhone.isEmpty() || startDate == null || endDate == null) {
             Log.e("SaveCourse", "Failed to save: One or more fields are empty.");
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-            return;
+        } else {
+            Courses course = new Courses(title, startDate, endDate, status, instructorName, instructorEmail, instructorPhone, termId);
+            repository.insert(course);
+            Toast.makeText(this, "Course added successfully", Toast.LENGTH_SHORT).show();
+            finish();;
         }
-
-        //create new course object
-        Courses course = new Courses();
-        course.setTitle(title);
-        course.setStatus(status);
-        course.setInstructorName(instructorName);
-        course.setInstructorEmail(instructorEmail);
-        course.setInstructorPhone(instructorPhone);
-        course.setStartDate(startDate);
-        course.setEndDate(endDate);
-
-        repository.insert(course);
-
-        Toast.makeText(AddCourse.this, "Course saved successfully", Toast.LENGTH_SHORT).show();
-        finish();
     }
 }

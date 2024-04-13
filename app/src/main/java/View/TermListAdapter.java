@@ -29,6 +29,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
     public interface OnTermListener {
         void onEditClicked(int position);
         void onDeleteClicked(int position);
+        void onViewClicked(int position); //for viewing course details
     }
 
     // Constructor
@@ -72,7 +73,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
         private final TextView titleTextView;
         private final TextView startDateTextView;
         private final TextView endDateTextView;
-        Button editButton, deleteButton;
+        Button editButton, deleteButton, viewButton;
 
         //View Holder for Term List
         TermViewHolder(View itemView, OnTermListener listener) {
@@ -82,6 +83,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
             endDateTextView = itemView.findViewById(R.id.endDate);
             editButton = itemView.findViewById(R.id.editButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
+            viewButton = itemView.findViewById(R.id.viewButton);
             //setup click listeners
             editButton.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -96,6 +98,14 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
                     listener.onDeleteClicked(position);
                 }
             });
+
+            //view button click listener
+            viewButton.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onViewClicked(position);
+                }
+            });
         }
 
         void bind(final Terms current) {
@@ -105,17 +115,6 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
             startDateTextView.setText(current.getStartDate());
             endDateTextView.setText(current.getEndDate());
 
-            itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    Intent intent = new Intent(v.getContext(), TermDetail.class);
-                    intent.putExtra("termId", current.getTermID());
-                    intent.putExtra("title", current.getTitle());
-                    intent.putExtra("start date", current.getStartDate());
-                    intent.putExtra("end date", current.getEndDate());
-                    v.getContext().startActivity(intent);
-                }
-            });
         }
     }
 }
