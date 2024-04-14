@@ -23,7 +23,7 @@ public class Courses {
     @ColumnInfo(name = "end")
     private String endDate;
     @ColumnInfo(name = "status")
-    private String status; // TODO spinner "In Progress", "Completed", "Dropped", "Plan to take"
+    private String status;
     @ColumnInfo(name = "instructorName")
     private String instructorName;
     @ColumnInfo(name = "instructorEmail")

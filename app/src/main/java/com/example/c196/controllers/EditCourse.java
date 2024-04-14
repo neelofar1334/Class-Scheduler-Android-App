@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.c196.DAO.AssessmentsDAO;
@@ -22,8 +24,9 @@ import java.util.Locale;
 
 public class EditCourse extends MenuActivity {
     private Button startDatePickerButton, endDatePickerButton, submitButton, cancelButton;
-    private EditText titleEditText, statusEditText, instructorNameEditText, instructorEmailEditText, instructorPhoneEditText;
+    private EditText titleEditText, instructorNameEditText, instructorEmailEditText, instructorPhoneEditText;
     private String startDate, endDate;
+    private Spinner status;
     private Repository repository;
     private Courses course;
     private int courseId;
@@ -39,16 +42,23 @@ public class EditCourse extends MenuActivity {
         submitButton = findViewById(R.id.submitButton);
         cancelButton = findViewById(R.id.cancelButton);
         titleEditText = findViewById(R.id.title);
-        statusEditText = findViewById(R.id.status);
+        status = findViewById(R.id.status);
         instructorNameEditText = findViewById(R.id.InstructorName);
         instructorEmailEditText = findViewById(R.id.InstructorEmail);
         instructorPhoneEditText = findViewById(R.id.InstructorPhone);
 
+        setupSpinner();
         setupDatePickerButtons();
         setupSubmitButton();
         setupCancelButton();
         initializeRepository();
         loadData();
+    }
+
+    private void setupSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.course_status_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        status.setAdapter(adapter);
     }
 
     private void initializeRepository() {
@@ -62,7 +72,11 @@ public class EditCourse extends MenuActivity {
                 if (course != null) {
                     this.course = course;
                     titleEditText.setText(course.getTitle());
-                    statusEditText.setText(course.getStatus());
+                    //spinner
+                    ArrayAdapter<String> adapter = (ArrayAdapter<String>) status.getAdapter();
+                    int spinnerPosition = adapter.getPosition(course.getStatus());
+                    status.setSelection(spinnerPosition);
+                    //other
                     instructorNameEditText.setText(course.getInstructorName());
                     instructorEmailEditText.setText(course.getInstructorEmail());
                     instructorPhoneEditText.setText(course.getInstructorPhone());
@@ -115,17 +129,28 @@ public class EditCourse extends MenuActivity {
 
     private void saveCourse() {
         if (course != null) {
-            course.setTitle(titleEditText.getText().toString().trim());
-            course.setStatus(statusEditText.getText().toString().trim());
-            course.setInstructorName(instructorNameEditText.getText().toString().trim());
-            course.setInstructorEmail(instructorEmailEditText.getText().toString().trim());
-            course.setInstructorPhone(instructorPhoneEditText.getText().toString().trim());
+            String title = titleEditText.getText().toString().trim();
+            String courseStatus = status.getSelectedItem().toString();
+            String instructorName = instructorNameEditText.getText().toString().trim();
+            String instructorEmail = instructorEmailEditText.getText().toString().trim();
+            String instructorPhone = instructorPhoneEditText.getText().toString().trim();
 
+            if (title.isEmpty() || status == null || instructorName.isEmpty() || instructorEmail.isEmpty() || instructorPhone.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
+                Log.e("SaveCourse", "Failed to save: One or more fields are empty.");
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            course.setTitle(title);
+            course.setStatus(courseStatus);
+            course.setInstructorName(instructorName);
+            course.setInstructorEmail(instructorEmail);
+            course.setInstructorPhone(instructorPhone);
             course.setStartDate(startDate);
             course.setEndDate(endDate);
 
             repository.update(course);
-            Toast.makeText(EditCourse.this, "Course updated successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Course updated successfully", Toast.LENGTH_SHORT).show();
             finish();
         } else {
             Toast.makeText(this, "Unable to save: No course data", Toast.LENGTH_SHORT).show();

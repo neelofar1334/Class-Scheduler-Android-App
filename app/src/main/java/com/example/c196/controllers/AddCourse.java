@@ -31,8 +31,9 @@ import java.util.concurrent.Executors;
 
 public class AddCourse extends MenuActivity {
     private Button startDatePickerButton, endDatePickerButton, submitButton, cancelButton;
-    private EditText titleEditText, statusEditText, instructorNameEditText, instructorEmailEditText, instructorPhoneEditText;
-    private String startDate, endDate;
+    private EditText titleEditText, instructorNameEditText, instructorEmailEditText, instructorPhoneEditText;
+    private String startDate, endDate, courseStatus;
+    private Spinner status;
     private Repository repository;
     private int termId; //for term+course associations
 
@@ -53,14 +54,37 @@ public class AddCourse extends MenuActivity {
         submitButton = findViewById(R.id.submitButton);
         cancelButton = findViewById(R.id.cancelButton);
         titleEditText = findViewById(R.id.title);
-        statusEditText = findViewById(R.id.status);
+        status = findViewById(R.id.status);
         instructorNameEditText = findViewById(R.id.InstructorName);
         instructorEmailEditText = findViewById(R.id.InstructorEmail);
         instructorPhoneEditText = findViewById(R.id.InstructorPhone);
 
+        setupSpinner();
         setupDatePickerButtons();
         setupSubmitButton();
         setupCancelButton();
+    }
+    //spinner implementation
+    private void setupSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.course_status_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        status.setAdapter(adapter);
+        status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (position > 0) { // Excluding the hint
+                    courseStatus = parentView.getItemAtPosition(position).toString();
+                } else {
+                    courseStatus = null;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                courseStatus = null;
+            }
+        });
     }
 
     //implement datePicker
@@ -98,17 +122,16 @@ public class AddCourse extends MenuActivity {
     private void saveCourse() {
 
         String title = titleEditText.getText().toString().trim();
-        String status = statusEditText.getText().toString().trim();
         String instructorName = instructorNameEditText.getText().toString().trim();
         String instructorEmail = instructorEmailEditText.getText().toString().trim();
         String instructorPhone = instructorPhoneEditText.getText().toString().trim();
 
         //validation
-        if (title.isEmpty() || status.isEmpty() || instructorName.isEmpty() || instructorEmail.isEmpty() || instructorPhone.isEmpty() || startDate == null || endDate == null) {
+        if (title.isEmpty() || courseStatus == null || instructorName.isEmpty() || instructorEmail.isEmpty() || instructorPhone.isEmpty() || startDate == null || endDate == null) {
             Log.e("SaveCourse", "Failed to save: One or more fields are empty.");
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
         } else {
-            Courses course = new Courses(title, startDate, endDate, status, instructorName, instructorEmail, instructorPhone, termId);
+            Courses course = new Courses(title, startDate, endDate, courseStatus, instructorName, instructorEmail, instructorPhone, termId);
             repository.insert(course);
             Toast.makeText(this, "Course added successfully", Toast.LENGTH_SHORT).show();
             finish();;
