@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.c196.R;
+import com.example.c196.Utility.AlarmHelper;
 import com.example.c196.entities.Courses;
 import com.example.c196.entities.Notes;
 import com.example.c196.viewmodel.AssessmentViewModel;
@@ -32,9 +34,11 @@ public class CourseDetail extends MenuActivity implements NotesListAdapter.NoteA
     private TextView courseTitleLabel, courseStatus, courseStartDate, courseEndDate, instructorName, instructorEmail, instructorPhone;
     private RecyclerView assessmentsListRecyclerView, notesListrecyclerview;
     private Button addButton, addAssessmentButton;
+    private ImageView notifyStart, notifyEnd;
     private CourseViewModel courseViewModel;
     private NotesViewModel notesViewModel;
     private int courseId;
+    private String courseTitle; //for notification details
     private AssessmentViewModel assessmentViewModel;
     private NotesListAdapter notesAdapter;
 
@@ -43,6 +47,7 @@ public class CourseDetail extends MenuActivity implements NotesListAdapter.NoteA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
 
+        //retrieve course ID from existing course
         initializeViews();
         courseId = getIntent().getIntExtra("courseId", -1);
         setupViewModels();
@@ -50,6 +55,7 @@ public class CourseDetail extends MenuActivity implements NotesListAdapter.NoteA
             setupRecyclerView();
             loadCourseData();
             setupButtonListeners();
+            setupNotificationIcons();
         }
     }
 
@@ -65,6 +71,32 @@ public class CourseDetail extends MenuActivity implements NotesListAdapter.NoteA
         assessmentsListRecyclerView = findViewById(R.id.assessmentsList_recycler_view);
         notesListrecyclerview = findViewById(R.id.notesList_recycler_view);
         addButton = findViewById(R.id.addButton);
+        notifyStart = findViewById(R.id.notifyStart);
+        notifyEnd = findViewById(R.id.notifyEnd);
+        if (notifyEnd == null) {
+            Log.d("CourseDetail", "notifyEnd is null");
+        } else {
+            Log.d("CourseDetail", "notifyEnd is properly initialized");
+        }
+    }
+
+    private void loadCourseData() {
+        courseId = getIntent().getIntExtra("courseId", -1);
+        if (courseId != -1) {
+            courseViewModel.getCourseById(courseId).observe(this, this::populateCourseDetails);
+            setupNotificationIcons(); //notification details
+        }
+    }
+
+    private void populateCourseDetails(Courses courses) {
+        courseTitle = courses.getTitle(); //for notification details
+        courseTitleLabel.setText(courses.getTitle());
+        courseStatus.setText(courses.getStatus());
+        courseStartDate.setText(courses.getStartDate());
+        courseEndDate.setText(courses.getEndDate());
+        instructorName.setText(courses.getInstructorName());
+        instructorEmail.setText(courses.getInstructorEmail());
+        instructorPhone.setText(courses.getInstructorPhone());
     }
 
     private void setupViewModels() {
@@ -106,23 +138,6 @@ public class CourseDetail extends MenuActivity implements NotesListAdapter.NoteA
                 Toast.makeText(this, "No notes available.", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void loadCourseData() {
-        courseId = getIntent().getIntExtra("courseId", -1);
-        if (courseId != -1) {
-            courseViewModel.getCourseById(courseId).observe(this, this::populateCourseDetails);
-        }
-    }
-
-    private void populateCourseDetails(Courses courses) {
-        courseTitleLabel.setText(courses.getTitle());
-        courseStatus.setText(courses.getStatus());
-        courseStartDate.setText(courses.getStartDate());
-        courseEndDate.setText(courses.getEndDate());
-        instructorName.setText(courses.getInstructorName());
-        instructorEmail.setText(courses.getInstructorEmail());
-        instructorPhone.setText(courses.getInstructorPhone());
     }
 
 
@@ -196,5 +211,22 @@ public class CourseDetail extends MenuActivity implements NotesListAdapter.NoteA
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_menu, menu);
         return true;
+    }
+
+    //notifications
+    private void setupNotificationIcons() {
+        notifyStart.setOnClickListener(v -> {
+            String startDate = courseStartDate.getText().toString();
+            String startNotificationTitle = "Course ";
+            String startNotificationText = courseTitle + " starts on " + startDate;
+            AlarmHelper.setNotification(this, startDate, startNotificationTitle, startNotificationText, courseId);
+        });
+
+        notifyEnd.setOnClickListener(v -> {
+            String endDate = courseEndDate.getText().toString();
+            String endNotificationTitle = "Course ";
+            String endNotificationText = courseTitle + " ends on " + endDate;
+            AlarmHelper.setNotification(this, endDate, endNotificationTitle, endNotificationText, courseId + 1);
+        });
     }
 }

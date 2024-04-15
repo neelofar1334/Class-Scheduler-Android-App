@@ -1,23 +1,20 @@
 package com.example.c196.controllers;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.example.c196.R;
-import com.example.c196.entities.Assessments;
 import com.example.c196.viewmodel.AssessmentViewModel;
+import com.example.c196.Utility.AlarmHelper;
 
 public class AssessmentDetail extends MenuActivity {
     private TextView assessmentTitleLabel, assessmentType, assessmentStartDate, assessmentEndDate;
     private ImageView notifyStart, notifyEnd;
     private AssessmentViewModel assessmentViewModel;
     private int assessmentId;
+    private String assessmentTitle; //for notification details
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +49,13 @@ public class AssessmentDetail extends MenuActivity {
     private void loadAssessmentData(int id) {
         assessmentViewModel.getAssessmentById(id).observe(this, assessment -> {
             if (assessment != null) {
+                assessmentTitle = assessment.getTitle(); //for notification details
                 assessmentTitleLabel.setText(assessment.getTitle());
                 assessmentType.setText(assessment.getType());
                 assessmentStartDate.setText(assessment.getStartDate());
                 assessmentEndDate.setText(assessment.getEndDate());
+
+                setupNotificationIcons(); //notification details
             } else {
                 Toast.makeText(AssessmentDetail.this, "Assessment not found", Toast.LENGTH_SHORT).show();
             }
@@ -64,18 +64,17 @@ public class AssessmentDetail extends MenuActivity {
 
     private void setupNotificationIcons() {
         notifyStart.setOnClickListener(v -> {
-            // Set or remove a notification for the assessment start date
-            toggleNotification(assessmentStartDate.getText().toString(), "Assessment Start");
+            String startDate = assessmentStartDate.getText().toString();
+            String startNotificationTitle = "Start of Assessment";
+            String startNotificationText = assessmentTitle + " starts on " + startDate;
+            AlarmHelper.setNotification(this, startDate, startNotificationTitle, startNotificationText, assessmentId);
         });
 
         notifyEnd.setOnClickListener(v -> {
-            // Set or remove a notification for the assessment end date
-            toggleNotification(assessmentEndDate.getText().toString(), "Assessment End");
+            String endDate = assessmentEndDate.getText().toString();
+            String endNotificationTitle = "End of Assessment";
+            String endNotificationText = assessmentTitle + " ends on " + endDate;
+            AlarmHelper.setNotification(this, endDate, endNotificationTitle, endNotificationText, assessmentId + 1);
         });
-    }
-
-    private void toggleNotification(String date, String event) {
-        // This method would ideally check if a notification is already set, and either set or remove it
-        Toast.makeText(this, "Toggle notification for: " + event + " on " + date, Toast.LENGTH_SHORT).show();
     }
 }
