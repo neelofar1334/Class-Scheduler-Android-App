@@ -8,16 +8,19 @@ import androidx.room.RoomDatabase;
 
 import com.example.c196.DAO.AssessmentsDAO;
 import com.example.c196.DAO.CoursesDAO;
+import com.example.c196.DAO.NotesDAO;
 import com.example.c196.DAO.TermsDAO;
 import com.example.c196.entities.Assessments;
 import com.example.c196.entities.Courses;
+import com.example.c196.entities.Notes;
 import com.example.c196.entities.Terms;
 
-@Database(entities = {Assessments.class, Courses.class, Terms.class}, version = 8)
+@Database(entities = {Assessments.class, Courses.class, Terms.class, Notes.class}, version = 10)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract AssessmentsDAO assessmentDao();
     public abstract CoursesDAO coursesDao();
     public abstract TermsDAO termsDAO();
+    public abstract NotesDAO notesDAO();
     private static final String DATABASE_NAME = "my_database.db";
     private static volatile AppDatabase INSTANCE; //singleton instance
 

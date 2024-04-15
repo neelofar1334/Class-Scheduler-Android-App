@@ -1,9 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".controllers.AddNotes">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Add Note"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/noteTitle"
+            style="@style/AppTextView"/>
+
+        <EditText
+            android:id="@+id/noteTitle"
+            android:hint="Enter note title"
+            app:layout_constraintBottom_toTopOf="@id/noteEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            style="@style/AppEditText" />
+
+        <EditText
+            android:id="@+id/noteEditText"
+            app:layout_constraintBottom_toTopOf="@id/saveButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/noteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your note here"
+            android:inputType="textMultiLine"
+            android:minLines="5"
+            android:maxLines="10"
+            android:scrollbars="vertical"
+            android:gravity="top|start"
+            android:padding="16dp"
+            style="@style/AppEditText" />
+
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_height="50sp"
+            android:text="Submit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/noteEditText"
+            app:layout_constraintEnd_toStartOf="@+id/cancelButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:cornerRadius="0dp"
+            android:backgroundTint="@color/light_purple"
+            style="@style/AppButton"/>
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_height="50sp"
+            android:text="Cancel"
+            app:layout_constraintStart_toEndOf="@+id/saveButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/noteEditText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@+id/saveButton"
+            android:backgroundTint="@color/light_purple"
+            app:cornerRadius="0dp"
+            style="@style/AppButton"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

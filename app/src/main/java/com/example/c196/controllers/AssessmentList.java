@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
@@ -33,10 +34,11 @@ public class AssessmentList extends MenuActivity implements AssessmentListAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assessment_list);
 
+        //initialize recyclerView and adapter
         RecyclerView recyclerView = findViewById(R.id.assessments_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new AssessmentListAdapter(this, this, true); //true to show edit, view, delete buttons
+        adapter = new AssessmentListAdapter(this, new ArrayList<>(), this, true);
         recyclerView.setAdapter(adapter);
 
         assessmentViewModel = new ViewModelProvider(this).get(AssessmentViewModel.class);
@@ -51,25 +53,40 @@ public class AssessmentList extends MenuActivity implements AssessmentListAdapte
 
     @Override
     public void onViewClicked(int position) {
-        Assessments assessments = adapter.getAssessmentAtPosition(position);
-        Intent intent = new Intent(AssessmentList.this, AssessmentDetail.class);
-        intent.putExtra("assessmentId", assessments.getAssessmentId());
-        startActivity(intent);
+        if (adapter != null) {
+            Assessments assessment = adapter.getAssessmentAtPosition(position);
+            Intent intent = new Intent(AssessmentList.this, AssessmentDetail.class);
+            intent.putExtra("assessmentId", assessment.getAssessmentId());
+            startActivity(intent);
+            Log.d("AssessmentList", "Viewing assessment: " + assessment.getAssessmentId());
+        } else {
+            Log.e("AssessmentList", "Adapter is not initialized.");
+        }
     }
 
     @Override
     public void onEditClicked(int position) {
-        Assessments assessments = adapter.getAssessmentAtPosition(position);
-        Intent intent = new Intent(AssessmentList.this, EditAssessment.class);
-        intent.putExtra("assessmentId", assessments.getAssessmentId());
-        startActivity(intent);
+        if (adapter != null) {
+            Assessments assessments = adapter.getAssessmentAtPosition(position);
+            Intent intent = new Intent(AssessmentList.this, EditAssessment.class);
+            intent.putExtra("assessmentId", assessments.getAssessmentId());
+            startActivity(intent);
+        } else {
+            Log.e("AssessmentList", "Adapter is not initialized.");
+        }
     }
 
     @Override
     public void onDeleteClicked(int position) {
-        Assessments assessments = adapter.getAssessmentAtPosition(position);
-        assessmentViewModel.delete(assessments);
+        if (adapter != null) {
+            Assessments assessments = adapter.getAssessmentAtPosition(position);
+            assessmentViewModel.delete(assessments);
+            adapter.notifyItemRemoved(position);
+        } else {
+            Log.e("AssessmentList", "Adapter is not initialized.");
+        }
     }
+
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
         getMenuInflater().inflate(R.menu.my_menu, menu);

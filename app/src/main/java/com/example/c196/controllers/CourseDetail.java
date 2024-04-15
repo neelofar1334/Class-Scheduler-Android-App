@@ -8,28 +8,35 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.c196.R;
 import com.example.c196.entities.Courses;
+import com.example.c196.entities.Notes;
 import com.example.c196.viewmodel.AssessmentViewModel;
 import com.example.c196.viewmodel.CourseViewModel;
+import com.example.c196.viewmodel.NotesViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import View.AssessmentListAdapter;
 import View.CourseListAdapter;
+import View.NotesListAdapter;
 
-public class CourseDetail extends MenuActivity {
+public class CourseDetail extends MenuActivity implements NotesListAdapter.NoteActionsListener {
 
     private TextView courseTitleLabel, courseStatus, courseStartDate, courseEndDate, instructorName, instructorEmail, instructorPhone;
-    private RecyclerView assessmentsListRecyclerView;
-    private Button addButton, shareButton, addAssessmentButton;
+    private RecyclerView assessmentsListRecyclerView, notesListrecyclerview;
+    private Button addButton, addAssessmentButton;
     private CourseViewModel courseViewModel;
+    private NotesViewModel notesViewModel;
     private int courseId;
     private AssessmentViewModel assessmentViewModel;
+    private NotesListAdapter notesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,30 +63,47 @@ public class CourseDetail extends MenuActivity {
         instructorPhone = findViewById(R.id.instructorPhone);
         addAssessmentButton = findViewById(R.id.addAssessmentButton);
         assessmentsListRecyclerView = findViewById(R.id.assessmentsList_recycler_view);
+        notesListrecyclerview = findViewById(R.id.notesList_recycler_view);
         addButton = findViewById(R.id.addButton);
-        shareButton = findViewById(R.id.shareButton);
     }
 
     private void setupViewModels() {
         courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
         assessmentViewModel = new ViewModelProvider(this).get(AssessmentViewModel.class);
+        notesViewModel = new ViewModelProvider(this).get(NotesViewModel.class);
     }
 
     private void setupRecyclerView() {
         assessmentsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        notesListrecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
-        //initialize the adapter with an empty list inside its constructor
-        AssessmentListAdapter adapter = new AssessmentListAdapter(this, null, false); //false to hide buttons from recyclerView row
+        // Initialize the assessment adapter with an empty list and no listener
+        AssessmentListAdapter assessmentAdapter = new AssessmentListAdapter(this, new ArrayList<>(), null, false);
+        assessmentsListRecyclerView.setAdapter(assessmentAdapter);
 
-        assessmentsListRecyclerView.setAdapter(adapter);
+        // Initialize the notes adapter with show buttons
+        notesAdapter = new NotesListAdapter(this, new ArrayList<>(), this, true);
+        notesListrecyclerview.setAdapter(notesAdapter);
 
-        // Observe the LiveData from ViewModel and update adapter
+        // Setup LiveData observers
+        setupObservers(assessmentAdapter, notesAdapter);
+    }
+
+
+    private void setupObservers(AssessmentListAdapter assessmentAdapter, NotesListAdapter notesAdapter) {
         assessmentViewModel.getAssessmentsBycourseId(courseId).observe(this, assessments -> {
             if (assessments != null) {
-                adapter.setAssessments(assessments);
+                assessmentAdapter.setAssessments(assessments);
             } else {
-                Log.d("CourseDetail", "No assessments available for this course");
                 Toast.makeText(this, "No assessments available.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        notesViewModel.getNotesByCourseId(courseId).observe(this, notes -> {
+            if (notes != null) {
+                notesAdapter.setNotes(notes);
+            } else {
+                Toast.makeText(this, "No notes available.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -101,11 +125,58 @@ public class CourseDetail extends MenuActivity {
         instructorPhone.setText(courses.getInstructorPhone());
     }
 
-    //notes buttons
+
+    //Buttons for notes recycler view row
+    @Override
+    public void onShareClicked(int position) {
+        Notes note = notesAdapter.getNoteAt(position);
+        if (note != null) {
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "Note Title: " + note.getNoteTitle() + "\nContent: " + note.getText());
+            sendIntent.setType("text/plain");
+            Intent shareIntent = Intent.createChooser(sendIntent, "Share Note via:");
+            startActivity(shareIntent);
+        } else {
+            Toast.makeText(this, "Note not available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onDeleteClicked(int position) {
+        Notes noteToDelete = notesAdapter.getNoteAt(position);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm Delete");
+        builder.setMessage("Are you sure you want to delete this note?");
+        builder.setPositiveButton("Delete", (dialog, which) -> {
+            notesViewModel.delete(noteToDelete);
+            notesAdapter.notifyItemRemoved(position);
+            notesAdapter.notifyDataSetChanged();
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
+    }
+
+    @Override
+    public void onViewClicked(int position) {
+        Notes noteToView = notesAdapter.getNoteAt(position);
+        showNoteDetailsDialog(noteToView);
+    }
+
+    //show note details for view button
+    private void showNoteDetailsDialog(Notes note) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(note.getNoteTitle());
+        builder.setMessage(note.getText());
+        builder.setPositiveButton("Close", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    //add note and add assessment buttons
     private void setupButtonListeners() {
         addButton.setOnClickListener(v -> onAddClicked());
         addAssessmentButton.setOnClickListener(v -> onAddAssessmentClicked());
-        shareButton.setOnClickListener(v -> onShareClicked());
     }
 
     public void onAddAssessmentClicked() {
@@ -120,10 +191,7 @@ public class CourseDetail extends MenuActivity {
         startActivity(intent);
     }
 
-    public void onShareClicked() {
-//TODO
-    }
-
+    //show app menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_menu, menu);

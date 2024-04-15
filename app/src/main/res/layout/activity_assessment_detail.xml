@@ -64,17 +64,6 @@
             android:textSize="20sp"
             style="@style/AppEditText"/>
 
-        <TextView
-            android:id="@+id/associatedCourse"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Associated Course"
-            app:layout_constraintTop_toBottomOf="@+id/assessmentEndDate"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="20sp"
-            style="@style/AppEditText"/>
-
         <ImageView
             android:id="@+id/notifyStart"
             android:layout_width="40dp"

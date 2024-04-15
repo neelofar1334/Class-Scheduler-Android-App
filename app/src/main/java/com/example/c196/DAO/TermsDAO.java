@@ -21,10 +21,6 @@ public interface TermsDAO {
     @Query("SELECT * FROM terms")
     LiveData<List<Terms>> getAllTerms();
 
-    //retrieves single course by name
-    @Query("SELECT * FROM terms WHERE `termTitle` = :title LIMIT 1")
-    Terms getTermTitle(String title);
-
     @Query("SELECT * FROM terms WHERE termID = :termID LIMIT 1")
     LiveData<Terms> getTermById(int termID);
 

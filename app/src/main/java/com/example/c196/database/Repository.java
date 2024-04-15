@@ -9,10 +9,12 @@ import androidx.lifecycle.LiveData;
 
 import com.example.c196.DAO.AssessmentsDAO;
 import com.example.c196.DAO.CoursesDAO;
+import com.example.c196.DAO.NotesDAO;
 import com.example.c196.DAO.TermsDAO;
 import com.example.c196.MainActivity;
 import com.example.c196.entities.Assessments;
 import com.example.c196.entities.Courses;
+import com.example.c196.entities.Notes;
 import com.example.c196.entities.Terms;
 import com.example.c196.viewmodel.CourseViewModel;
 
@@ -27,6 +29,7 @@ public class Repository {
     private CoursesDAO mCourseDAO;
     private TermsDAO mTermsDAO;
     private AssessmentsDAO mAssessmentsDAO;
+    private NotesDAO mNotesDAO;
     private ExecutorService databaseExecutor = Executors.newFixedThreadPool(4);
     private Context applicationContext;
 
@@ -35,6 +38,7 @@ public class Repository {
         mCourseDAO = db.coursesDao();
         mTermsDAO = db.termsDAO();
         mAssessmentsDAO = db.assessmentDao();
+        mNotesDAO = db.notesDAO();
         this.applicationContext = application.getApplicationContext();
     }
 
@@ -43,38 +47,32 @@ public class Repository {
     public LiveData<List<Courses>> getAllCourses() {
         return mCourseDAO.getAllCourses();
     }
-
     //async execution for write operation
     public void insert(Courses courses) {
         databaseExecutor.execute(() -> mCourseDAO.insert(courses));
     }
-
     public void update(Courses courses) {
         databaseExecutor.execute(() -> mCourseDAO.update(courses));
     }
-
     public void delete(Courses courses) {
         databaseExecutor.execute(() -> mCourseDAO.delete(courses));
     }
-
     public LiveData<Courses> getCourseById(int courseId) {
         return mCourseDAO.getCourseById(courseId);
     }
-
     public LiveData<List<Courses>> getCoursesByTermId(int termId) {
         return mCourseDAO.getCoursesByTermId(termId);
     }
-
     //course validation
     public boolean courseExists(int courseId) {
         return mCourseDAO.courseExists(courseId);
     }
 
+
     //Terms
     public LiveData<List<Terms>> getAllTerms() {
         return mTermsDAO.getAllTerms();
     }
-
     //async execution for write operation
     public void insert(final Terms term) {
         databaseExecutor.execute(() -> {
@@ -85,11 +83,9 @@ public class Repository {
             });
         });
     }
-
     public void update(Terms terms) {
         databaseExecutor.execute(() -> mTermsDAO.update(terms));
     }
-
     public void delete(Terms terms) {
         databaseExecutor.execute(() -> mTermsDAO.delete(terms));
     }
@@ -102,7 +98,6 @@ public class Repository {
     public LiveData<List<Assessments>> getAllAssessments() {
         return mAssessmentsDAO.getAllAssessments();
     }
-
     public void insert(final Assessments assessments) {
         databaseExecutor.execute(() -> {
             mAssessmentsDAO.insert(assessments);
@@ -112,20 +107,34 @@ public class Repository {
             });
         });
     }
-
     public void update(Assessments assessments) {
         databaseExecutor.execute(() -> mAssessmentsDAO.update(assessments));
     }
-
     public void delete(Assessments assessments) {
         databaseExecutor.execute(() -> mAssessmentsDAO.delete(assessments));
     }
-
     public LiveData<Assessments> getAssessmentById(int assessmentId) {
         return mAssessmentsDAO.getAssessmentByID(assessmentId);
     }
-
     public AssessmentsDAO getAssessmentsDAO() {
         return mAssessmentsDAO;
+    }
+
+
+    //Notes
+    public void insert(final Notes notes) {
+        new Thread(() -> mNotesDAO.insert(notes)).start();
+    }
+    public void update(Notes notes) {
+        databaseExecutor.execute(() -> mNotesDAO.update(notes));
+    }
+    public void delete(Notes notes) {
+        databaseExecutor.execute(() -> mNotesDAO.delete(notes));
+    }
+    public LiveData<Notes> getNoteById(int noteId) {
+        return mNotesDAO.getNoteById(noteId);
+    }
+    public LiveData<List<Notes>> getNotesByCourseId(int courseId) {
+        return mNotesDAO.getNotesByCourseId(courseId);
     }
 }

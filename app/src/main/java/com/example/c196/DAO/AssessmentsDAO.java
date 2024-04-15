@@ -9,25 +9,17 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.c196.entities.Assessments;
-import com.example.c196.entities.Courses;
 
 import java.util.List;
 
 @Dao
 public interface AssessmentsDAO {
 
-    //retrieves single assessment by title
-    @Query("SELECT * FROM assessments WHERE title = :title LIMIT 1")
-    Assessments getAssessmentByTitle(String title);
-
     @Query("SELECT * FROM assessments WHERE assessmentId = :assessmentId LIMIT 1")
     LiveData<Assessments> getAssessmentByID(int assessmentId);
 
     @Query("SELECT * FROM assessments")
     LiveData<List<Assessments>> getAllAssessments();
-
-    @Query("SELECT * FROM assessments WHERE assessmentId=:assessment ORDER BY assessmentId ASC")
-    LiveData<List<Assessments>> getAssociatedAssessments(int assessment);
 
     @Query("SELECT * FROM assessments WHERE courseId = :courseId")
     LiveData<List<Assessments>> getAssessmentsBycourseId(int courseId);
