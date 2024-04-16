@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controllers.AddAssessment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Add Assessment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/title"
+            style="@style/AppTextView"/>
+
+        <EditText
+            android:id="@+id/title"
+            android:hint="Enter assessment title"
+            app:layout_constraintBottom_toTopOf="@id/typeSpinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            style="@style/AppEditText" />
+
+        <Spinner
+            android:id="@+id/typeSpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintBottom_toTopOf="@+id/startDatePicker"
+            style="@style/AppEditText"/>
+
+        <Button
+            android:id="@+id/startDatePicker"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/endDatePicker"
+            app:layout_constraintTop_toBottomOf="@+id/typeSpinner"
+            android:text="Start Date"
+            app:cornerRadius="0dp"
+            style="@style/AppButton" />
+
+        <Button
+            android:id="@+id/endDatePicker"
+            app:layout_constraintStart_toEndOf="@id/startDatePicker"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/typeSpinner"
+            app:layout_constraintBottom_toTopOf="@+id/cancelButton"
+            app:layout_constraintBaseline_toBaselineOf="@+id/startDatePicker"
+            android:text="End Date"
+            app:cornerRadius="0dp"
+            style="@style/AppButton" />
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_height="50sp"
+            android:text="Submit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/startDatePicker"
+            app:layout_constraintEnd_toStartOf="@+id/cancelButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:cornerRadius="0dp"
+            android:backgroundTint="@color/light_purple"
+            style="@style/AppButton"/>
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_height="50sp"
+            android:text="Cancel"
+            app:layout_constraintStart_toEndOf="@+id/submitButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/endDatePicker"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@+id/submitButton"
+            android:backgroundTint="@color/light_purple"
+            app:cornerRadius="0dp"
+            style="@style/AppButton"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
