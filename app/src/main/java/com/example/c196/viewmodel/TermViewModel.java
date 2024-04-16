@@ -14,7 +14,7 @@ import com.example.c196.entities.Terms;
 import java.util.List;
 
 public class TermViewModel extends AndroidViewModel {
-    private LiveData<List<TermsWithCourses>> termsWithCourses;
+
     private LiveData<List<Terms>> mAllTerms;
     private Repository repository;
 
