@@ -12,7 +12,7 @@ import java.util.List;
 
 public class NotesViewModel extends AndroidViewModel {
 
-    private Repository repository;
+    private final Repository repository;
 
     public NotesViewModel(Application application) {
         super(application);

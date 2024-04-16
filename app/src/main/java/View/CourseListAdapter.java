@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseViewHolder> {
-    private List<Courses> mCourses;
-    private LayoutInflater mInflater;
-    private Context context;
-    private OnCourseListener listener;
-    private boolean showButtons; //for showing or hiding the edit, view, and delete buttons in the recyclerView row
+    private final List<Courses> mCourses;
+    private final LayoutInflater mInflater;
+    private final Context context;
+    private final OnCourseListener listener;
+    private final boolean showButtons; //for showing or hiding the edit, view, and delete buttons in the recyclerView row
 
     //for edit and delete buttons
     public interface OnCourseListener {
@@ -33,12 +33,12 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         void onViewClicked(int position); //for viewing course details
     }
 
-    // Constructor
+    //constructor
     public CourseListAdapter(Context context, OnCourseListener listener, boolean showButtons) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.showButtons = showButtons;
-        this.mCourses = new ArrayList<>();  // Initialize the list here
+        this.mCourses = new ArrayList<>();
         this.listener = (listener != null) ? listener : new OnCourseListener() {
             @Override
             public void onEditClicked(int position) { }

@@ -15,8 +15,8 @@ import java.util.List;
 
 public class TermViewModel extends AndroidViewModel {
 
-    private LiveData<List<Terms>> mAllTerms;
-    private Repository repository;
+    private final LiveData<List<Terms>> mAllTerms;
+    private final Repository repository;
 
     public TermViewModel (Application application) {
         super(application);

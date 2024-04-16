@@ -109,15 +109,15 @@ public class CourseDetail extends MenuActivity implements NotesListAdapter.NoteA
         assessmentsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         notesListrecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
-        // Initialize the assessment adapter with an empty list and no listener
+        //initialize assessment adapter with an empty list and no listener
         AssessmentListAdapter assessmentAdapter = new AssessmentListAdapter(this, new ArrayList<>(), null, false);
         assessmentsListRecyclerView.setAdapter(assessmentAdapter);
 
-        // Initialize the notes adapter with show buttons
+        //initialize notes adapter with show buttons
         notesAdapter = new NotesListAdapter(this, new ArrayList<>(), this, true);
         notesListrecyclerview.setAdapter(notesAdapter);
 
-        // Setup LiveData observers
+        //setup LiveData
         setupObservers(assessmentAdapter, notesAdapter);
     }
 
@@ -141,7 +141,7 @@ public class CourseDetail extends MenuActivity implements NotesListAdapter.NoteA
     }
 
 
-    //Buttons for notes recycler view row
+    //buttons for notes recycler view row
     @Override
     public void onShareClicked(int position) {
         Notes note = notesAdapter.getNoteAt(position);

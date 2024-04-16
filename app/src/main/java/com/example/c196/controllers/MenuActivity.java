@@ -10,19 +10,18 @@ import com.example.c196.R;
 import com.example.c196.entities.Notes;
 
 public class MenuActivity extends AppCompatActivity {
-    // Common menu creation logic
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_menu, menu);
 
-        // Configure SearchView
+        //search function for action bar
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
 
         return true;
     }
 
-    // Common menu item selection logic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
@@ -43,7 +42,6 @@ public class MenuActivity extends AppCompatActivity {
         return true;
     }
 
-    // Helper method for navigation
     protected void navigateToActivity(Class<?> cls) {
         Intent intent = new Intent(this, cls);
         startActivity(intent);

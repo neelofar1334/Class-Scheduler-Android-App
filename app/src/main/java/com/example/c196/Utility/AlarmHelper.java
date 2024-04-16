@@ -14,8 +14,6 @@ import java.util.TimeZone;
 
 public class AlarmHelper {
 
-    TimeZone tz = TimeZone.getDefault();
-
     public static void setNotification(Context context, String dateStr, String title, String details, int notificationId) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         sdf.setTimeZone(TimeZone.getDefault());

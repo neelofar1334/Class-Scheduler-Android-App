@@ -73,7 +73,7 @@ public class AddCourse extends MenuActivity {
         status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (position > 0) { // Excluding the hint
+                if (position > 0) {
                     courseStatus = parentView.getItemAtPosition(position).toString();
                 } else {
                     courseStatus = null;
@@ -134,7 +134,7 @@ public class AddCourse extends MenuActivity {
             Courses course = new Courses(title, startDate, endDate, courseStatus, instructorName, instructorEmail, instructorPhone, termId);
             repository.insert(course);
             Toast.makeText(this, "Course added successfully", Toast.LENGTH_SHORT).show();
-            finish();;
+            finish();
         }
     }
 }

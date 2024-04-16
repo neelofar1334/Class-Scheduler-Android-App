@@ -103,6 +103,7 @@ public class EditTerm extends MenuActivity {
         datePickerDialog.show();
     }
 
+    //buttons
     private void setupSubmitButton() {
         submitButton.setOnClickListener(v -> saveTerm());
     }

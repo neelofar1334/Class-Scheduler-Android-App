@@ -15,9 +15,9 @@ import java.util.List;
 
 public class AssessmentViewModel extends AndroidViewModel {
 
-    private LiveData<List<Assessments>> allAssessments;
-    private Repository repository;
-    private AssessmentsDAO assessmentsDAO;
+    private final LiveData<List<Assessments>> allAssessments;
+    private final Repository repository;
+    private final AssessmentsDAO assessmentsDAO;
 
     public AssessmentViewModel(Application application) {
         super(application);

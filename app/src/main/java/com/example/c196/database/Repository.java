@@ -26,12 +26,12 @@ import android.os.Handler;
 public class Repository {
 
     //m is for instance variable, s is for static variable
-    private CoursesDAO mCourseDAO;
-    private TermsDAO mTermsDAO;
-    private AssessmentsDAO mAssessmentsDAO;
-    private NotesDAO mNotesDAO;
-    private ExecutorService databaseExecutor = Executors.newFixedThreadPool(4);
-    private Context applicationContext;
+    private final CoursesDAO mCourseDAO;
+    private final TermsDAO mTermsDAO;
+    private final AssessmentsDAO mAssessmentsDAO;
+    private final NotesDAO mNotesDAO;
+    private final ExecutorService databaseExecutor = Executors.newFixedThreadPool(4);
+    private final Context applicationContext;
 
     public Repository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);

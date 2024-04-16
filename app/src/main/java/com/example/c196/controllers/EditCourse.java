@@ -119,6 +119,8 @@ public class EditCourse extends MenuActivity {
         datePickerDialog.show();
     }
 
+
+    //buttons
     private void setupSubmitButton() {
         submitButton.setOnClickListener(v -> saveCourse());
     }

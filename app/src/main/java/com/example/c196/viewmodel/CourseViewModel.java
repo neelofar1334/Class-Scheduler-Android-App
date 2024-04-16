@@ -13,8 +13,8 @@ import com.example.c196.entities.Courses;
 import java.util.List;
 
 public class CourseViewModel extends AndroidViewModel {
-    private LiveData<List<Courses>> allCourses;
-    private Repository repository;
+    private final LiveData<List<Courses>> allCourses;
+    private final Repository repository;
 
     public CourseViewModel(Application application) {
         super(application);

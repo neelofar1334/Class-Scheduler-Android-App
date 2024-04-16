@@ -74,7 +74,7 @@ public class AddAssessment extends MenuActivity {
            typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                @Override
                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                   if (position > 0) { // Excluding the hint
+                   if (position > 0) {
                        assessmentType = parentView.getItemAtPosition(position).toString();
                    } else {
                        assessmentType = null;
@@ -111,23 +111,15 @@ public class AddAssessment extends MenuActivity {
         datePickerDialog.show();
     }
 
-    /**
-     * Submit button function
-     */
+
     private void setupSubmitButton() {
         submitButton.setOnClickListener(v -> saveAssessment());
     }
 
-    /**
-     * Cancel button function
-     */
     private void setupCancelButton() {
         cancelButton.setOnClickListener(v -> finish()); //close the activity
     }
 
-    /**
-     * Save assessment function
-     */
     private void saveAssessment() {
         String title = titleEditText.getText().toString().trim();
         if (title.isEmpty() || assessmentType == null || startDate == null || endDate == null) {

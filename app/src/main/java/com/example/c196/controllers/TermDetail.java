@@ -70,7 +70,7 @@ public class TermDetail extends MenuActivity {
 
         courseListRecyclerView.setAdapter(adapter);
 
-        // Observe the LiveData from ViewModel and update adapter
+        //observe LiveData from ViewModel and update adapter
         courseViewModel.getCoursesByTermId(termId).observe(this, courses -> {
             if (courses != null) {
                 adapter.setCourses(courses);

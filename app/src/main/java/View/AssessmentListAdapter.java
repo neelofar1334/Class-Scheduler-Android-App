@@ -22,11 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAdapter.AssessmentViewHolder> {
-    private List<Assessments> mAssessments;
-    private LayoutInflater mInflater;
-    private Context mContext;
+    private final List<Assessments> mAssessments;
+    private final LayoutInflater mInflater;
+    private final Context mContext;
     private final onAssessmentListener mListener;
-    private boolean showButtons; //for showing or hiding the edit, view, and delete buttons in the recyclerView row
+    private final boolean showButtons; //for showing or hiding the edit, view, and delete buttons in the recyclerView row
 
     //for edit and delete buttons
     public interface onAssessmentListener {
@@ -35,7 +35,7 @@ public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAd
         void onViewClicked(int position); //for viewing course details
     }
 
-    // Constructor
+    //constructor
     public AssessmentListAdapter(Context context, List<Assessments> assessments, onAssessmentListener listener, boolean showButtons) {
         mContext = context;
         mInflater = LayoutInflater.from(context);

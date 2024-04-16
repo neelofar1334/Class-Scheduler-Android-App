@@ -19,7 +19,6 @@ public interface CoursesDAO {
     @Query("SELECT * FROM courses WHERE courseId = :courseId")
     LiveData<Courses> getCourseById(int courseId);
 
-
     @Query("SELECT * FROM courses")
     LiveData<List<Courses>> getAllCourses();
 

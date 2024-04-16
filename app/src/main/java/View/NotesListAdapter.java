@@ -17,10 +17,10 @@ import java.util.List;
 
 public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.NoteViewHolder> {
     private List<Notes> mNotes;
-    private LayoutInflater mInflater;
-    private Context mContext;
-    private NoteActionsListener mListener;
-    private boolean showButtons;
+    private final LayoutInflater mInflater;
+    private final Context mContext;
+    private final NoteActionsListener mListener;
+    private final boolean showButtons;
 
     public interface NoteActionsListener {
         void onDeleteClicked(int position);
@@ -68,7 +68,9 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Note
 
     static class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView noteTitle;
-        private Button shareButton, deleteButton, viewButton;
+        private final Button shareButton;
+        private final Button deleteButton;
+        private final Button viewButton;
 
         NoteViewHolder(View itemView, NoteActionsListener listener) {
             super(itemView);
