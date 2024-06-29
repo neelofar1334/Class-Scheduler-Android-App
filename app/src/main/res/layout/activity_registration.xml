@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/main"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".registration.RegistrationActivity"
+android:padding="16dp">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- User ID (auto-generated) -->
+    <TextView
+        android:id="@+id/userIdLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="User ID: (auto-generated)"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <!-- User Name -->
+    <EditText
+        android:id="@+id/userName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="User Name"
+        android:inputType="textPersonName"
+        android:textSize="16sp" />
+
+    <!-- Password -->
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textSize="16sp" />
+
+    <!-- User Type Dropdown -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="User Type"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp" />
+
+    <Spinner
+        android:id="@+id/userTypeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/user_types"
+        android:textSize="16sp" />
+
+    <!-- Student ID (auto-generated if student type selected) -->
+    <TextView
+        android:id="@+id/studentIdLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Student ID: (auto-generated)"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:layout_marginTop="16dp" />
+
+    <!-- Admin Permissions Dropdown (if admin type selected) -->
+    <TextView
+        android:id="@+id/adminPermissionsLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Admin Permissions"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:layout_marginTop="16dp" />
+
+    <Spinner
+        android:id="@+id/adminPermissionsSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/admin_permissions"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <!-- Register Button -->
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:layout_marginTop="24dp" />
+</LinearLayout>
+</ScrollView>

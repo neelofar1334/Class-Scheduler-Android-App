@@ -3,6 +3,8 @@
     <string name="courses">Courses</string>
     <string name="terms">Terms</string>
     <string name="assessments">Assessments</string>
+
+    <!-- Arrays for course spinners -->
     <string-array name="assessment_types">
         <item>Choose Assessment Type</item> <!-- hint -->
         <item>Objective</item>
@@ -15,4 +17,30 @@
         <item>Dropped</item>
         <item>Plan to Take</item>
     </string-array>
+
+    <!-- Log In/Registration details -->
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    <!-- Arrays for Log In spinners -->
+    <string-array name="user_types">
+        <item>Student</item>
+        <item>Admin</item>
+    </string-array>
+
+    <string-array name="admin_permissions">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
+    <!-- Error messages -->
+    <string name="register_failed">Registration failed</string>
+
 </resources>

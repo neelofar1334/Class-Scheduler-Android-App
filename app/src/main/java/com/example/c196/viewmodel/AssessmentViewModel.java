@@ -5,11 +5,10 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+
 import com.example.c196.DAO.AssessmentsDAO;
 import com.example.c196.database.Repository;
 import com.example.c196.entities.Assessments;
-import com.example.c196.entities.Courses;
-import com.example.c196.entities.Notes;
 
 import java.util.List;
 

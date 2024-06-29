@@ -1,28 +1,23 @@
 package com.example.c196.controllers;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.c196.R;
+import com.example.c196.entities.Assessments;
+import com.example.c196.viewmodel.AssessmentViewModel;
 
 import android.app.DatePickerDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.c196.DAO.AssessmentsDAO;
-import com.example.c196.R;
-import com.example.c196.database.AppDatabase;
 import com.example.c196.database.Repository;
-import com.example.c196.entities.Assessments;
-import com.example.c196.entities.Courses;
-import com.example.c196.entities.Terms;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
