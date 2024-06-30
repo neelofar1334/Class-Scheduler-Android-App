@@ -3,25 +3,37 @@ package com.example.c196.ui.login;
 import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import android.util.Log;
 import android.util.Patterns;
+import android.widget.Toast;
 
 import com.example.c196.R;
+import com.example.c196.DAO.UsersDAO;
+import com.example.c196.database.AppDatabase;
 import com.example.c196.database.loginData.LModel.LoginRepository;
 import com.example.c196.database.loginData.LModel.LoggedInUser;
 import com.example.c196.database.loginData.LModel.loginResult;
+import com.example.c196.entities.User;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LoginViewModel extends AndroidViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private final LoginRepository loginRepository;
+    private final ExecutorService executorService;
+    private final UsersDAO usersDAO;
 
-    public LoginViewModel(Application application) {
+    public LoginViewModel(@NonNull Application application) {
         super(application);
+        AppDatabase db = AppDatabase.getDatabase(application);
         loginRepository = LoginRepository.getInstance(application);
+        executorService = Executors.newSingleThreadExecutor();
+        usersDAO = db.usersDAO();
     }
 
     public LiveData<LoginFormState> getLoginFormState() {
@@ -33,15 +45,26 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     public void login(String username, String password) {
-        // can be launched in a separate asynchronous job
-        loginResult<LoggedInUser> result = loginRepository.login(username, password);
+        executorService.execute(() -> {
+            User user = usersDAO.getUserByUsername(username);
+            if (user != null && user.getPassword().equals(password)) {
+                // Successful login
+                loginResult.postValue(new LoginResult(new LoggedInUserView(user.getUsername())));
+            } else {
+                // Login failed
+                if (user == null) {
+                    postToast("User not found");
+                } else {
+                    postToast("Invalid password");
+                }
+                loginResult.postValue(new LoginResult(R.string.login_failed));
+            }
+        });
+    }
 
-        if (result instanceof loginResult.Success) {
-            LoggedInUser data = ((loginResult.Success<LoggedInUser>) result).getData();
-            this.loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-        } else {
-            this.loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
+    private void postToast(String message) {
+        new android.os.Handler(android.os.Looper.getMainLooper()).post(() ->
+                Toast.makeText(getApplication(), message, Toast.LENGTH_SHORT).show());
     }
 
     public void loginDataChanged(String username, String password) {

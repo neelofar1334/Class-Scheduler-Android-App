@@ -1,6 +1,9 @@
 package com.example.c196.database.rModel;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
 import com.example.c196.DAO.AdminDAO;
 import com.example.c196.DAO.StudentDAO;
@@ -19,6 +22,7 @@ public class RegistrationRepository {
     private final AdminDAO adminDAO;
     private final StudentDAO studentDAO;
     private final ExecutorService executorService;
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     public RegistrationRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -26,19 +30,20 @@ public class RegistrationRepository {
         adminDAO = db.adminDAO();
         studentDAO = db.studentDAO();
         executorService = Executors.newSingleThreadExecutor();
+
     }
 
     public void register(String username, String password, String userType, String permissions, RegistrationCallback callback) {
         executorService.execute(() -> {
             try {
-                // Check if the user already exists
+                //Check if the user already exists
                 User existingUser = usersDAO.getUserByUsername(username);
                 if (existingUser != null) {
-                    callback.onFailure(new Exception("User already exists"));
+                    mainHandler.post(() -> callback.onFailure(new Exception("User already exists")));
                     return;
                 }
 
-                // Handle user registration
+                //Register new user
                 User newUser;
                 if ("admin".equalsIgnoreCase(userType)) {
                     newUser = new Admin(java.util.UUID.randomUUID().toString(), username, password, userType, permissions);
@@ -52,9 +57,11 @@ public class RegistrationRepository {
                     usersDAO.insert(newUser);
                 }
 
-                callback.onSuccess(new RegisteredUser(newUser.getId(), newUser.getUsername()));
+                Log.d("RegistrationRepository", "User registered successfully");
+                mainHandler.post(() -> callback.onSuccess(new RegisteredUser(newUser.getId(), newUser.getUsername())));
             } catch (Exception e) {
-                callback.onFailure(new Exception("Error registering", e));
+                Log.e("RegistrationRepository", "Error during registration", e);
+                mainHandler.post(() -> callback.onFailure(new Exception("Error registering", e)));
             }
         });
     }

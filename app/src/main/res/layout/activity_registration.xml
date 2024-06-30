@@ -24,19 +24,19 @@ android:padding="16dp">
 
     <!-- User Name -->
     <EditText
-        android:id="@+id/userName"
+        android:id="@+id/usernameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="User Name"
+        android:hint="Enter a username"
         android:inputType="textPersonName"
         android:textSize="16sp" />
 
     <!-- Password -->
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="Password must be >5 characters"
         android:inputType="textPassword"
         android:textSize="16sp" />
 

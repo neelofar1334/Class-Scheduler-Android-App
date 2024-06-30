@@ -1,25 +1,45 @@
 package com.example.c196.registration;
 
 import android.app.Application;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import com.example.c196.DAO.AdminDAO;
+import com.example.c196.DAO.StudentDAO;
+import com.example.c196.DAO.UsersDAO;
 import com.example.c196.R;
-import com.example.c196.database.rModel.RegistrationRepository;
+import com.example.c196.database.AppDatabase;
 import com.example.c196.database.rModel.RegisteredUser;
-import com.example.c196.database.rModel.GenericResult;
+import com.example.c196.database.rModel.RegistrationRepository;
+import com.example.c196.entities.Admin;
+import com.example.c196.entities.Student;
+import com.example.c196.entities.User;
 
-public class RegistrationViewModel extends ViewModel {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class RegistrationViewModel extends AndroidViewModel {
 
     private MutableLiveData<RegisterFormState> registerFormState = new MutableLiveData<>();
     private MutableLiveData<UserRegistrationResult> registerResult = new MutableLiveData<>();
-    private RegistrationRepository registrationRepository;
+    private final RegistrationRepository registrationRepository;
+    private final UsersDAO usersDAO;
+    private final AdminDAO adminDAO;
+    private final StudentDAO studentDAO;
+    private final ExecutorService executorService;
 
-    public RegistrationViewModel(RegistrationRepository registrationRepository) {
-        this.registrationRepository = registrationRepository;
+    public RegistrationViewModel(@NonNull Application application) {
+        super(application);
+        AppDatabase db = AppDatabase.getDatabase(application);
+        usersDAO = db.usersDAO();
+        adminDAO = db.adminDAO();
+        studentDAO = db.studentDAO();
+        registrationRepository = new RegistrationRepository(application);
+        executorService = Executors.newSingleThreadExecutor();
     }
 
     public LiveData<RegisterFormState> getRegisterFormState() {
@@ -30,16 +50,40 @@ public class RegistrationViewModel extends ViewModel {
         return registerResult;
     }
 
-    public void register(String username, String password, String userType, String permissions) {
-        registrationRepository.register(username, password, userType, permissions, new RegistrationRepository.RegistrationCallback() {
-            @Override
-            public void onSuccess(RegisteredUser user) {
-                registerResult.setValue(new UserRegistrationResult(new RegisteredUserView(user.getDisplayName())));
-            }
+    public void register(String username, String password, String userType, String permissions, RegistrationRepository.RegistrationCallback callback) {
+        executorService.execute(() -> {
+            try {
+                // Check if the user already exists
+                User existingUser = usersDAO.getUserByUsername(username);
+                if (existingUser != null) {
+                    registerResult.postValue(new UserRegistrationResult(R.string.user_exists));
+                    return;
+                }
 
-            @Override
-            public void onFailure(Exception e) {
-                registerResult.setValue(new UserRegistrationResult(R.string.register_failed));
+                // Register new user
+                User newUser = new User(java.util.UUID.randomUUID().toString(), username, password, userType);
+                usersDAO.insert(newUser); // Insert into User table
+
+                if ("admin".equalsIgnoreCase(userType)) {
+                    Admin admin = new Admin(newUser.getId(), username, password, userType, permissions);
+                    adminDAO.insert(admin);
+                } else if ("student".equalsIgnoreCase(userType)) {
+                    String studentId = java.util.UUID.randomUUID().toString();
+                    Student student = new Student(newUser.getId(), username, password, userType, studentId);
+                    studentDAO.insert(student);
+                }
+
+                // Convert User to RegisteredUser and call onSuccess
+                RegisteredUser registeredUser = new RegisteredUser(newUser.getId(), newUser.getUsername());
+                callback.onSuccess(registeredUser);
+
+                registerResult.postValue(new UserRegistrationResult(new RegisteredUserView(newUser.getUsername())));
+                Log.d("RegistrationViewModel", "User registered successfully");
+
+            } catch (Exception e) {
+                registerResult.postValue(new UserRegistrationResult(R.string.register_failed));
+                callback.onFailure(new Exception("Error registering", e));
+                Log.e("RegistrationViewModel", "Error during registration", e);
             }
         });
     }
