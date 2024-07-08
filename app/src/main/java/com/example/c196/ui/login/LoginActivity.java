@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -18,9 +19,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.c196.MainActivity;
 import com.example.c196.R;
+import com.example.c196.controllers.AddTerm;
 import com.example.c196.registration.RegistrationActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -78,10 +81,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (loginResult.getSuccess() != null) {
                     updateUiWithUser(loginResult.getSuccess());
-                    // Navigate to main activity after successful login
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    // Show get started dialog
+                    showGetStartedDialog();
                 }
                 setResult(Activity.RESULT_OK);
             }
@@ -139,9 +140,30 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //Add term dialog box
+    private void showGetStartedDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_add_term, null);
+        builder.setView(dialogView);
+
+        Button addTermButton = dialogView.findViewById(R.id.addTermButton);
+
+        AlertDialog dialog = builder.create();
+
+        addTermButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, AddTerm.class);
+            startActivity(intent);
+            dialog.dismiss();
+        });
+
+        builder.setNegativeButton("Close", (dialogInterface, which) -> dialog.dismiss());
+
+        dialog.show();
+    }
+
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // Display a welcome message
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
