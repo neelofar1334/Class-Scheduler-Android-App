@@ -39,6 +39,7 @@ android {
 
 dependencies {
 
+    implementation ("com.itextpdf:itext7-core:7.1.15")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.2")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")

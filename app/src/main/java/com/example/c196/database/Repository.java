@@ -137,4 +137,13 @@ public class Repository {
     public LiveData<List<Notes>> getNotesByCourseId(int courseId) {
         return mNotesDAO.getNotesByCourseId(courseId);
     }
+
+    //Generate Schedule
+    public LiveData<List<Courses>> getCoursesForTerm(int termId) {
+        return mCourseDAO.getCoursesForTerm(termId);
+    }
+
+    public LiveData<List<Assessments>> getAssessmentsForCourse(int courseId) {
+        return mAssessmentsDAO.getAssessmentsForCourse(courseId);
+    }
 }

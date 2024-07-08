@@ -66,4 +66,17 @@
         app:cornerRadius="0dp"
         style="@style/AppButton" />
 
+    <Button
+        android:id="@+id/scheduleButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="@string/schedule"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/termsButton"
+        app:cornerRadius="0dp"
+        style="@style/AppButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

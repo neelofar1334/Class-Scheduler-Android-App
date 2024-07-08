@@ -1,34 +1,38 @@
 package com.example.c196;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
-import androidx.appcompat.widget.SearchView;
+import android.widget.Toast;
 
-import com.example.c196.controllers.AddAssessment;
-import com.example.c196.controllers.AddCourse;
-import com.example.c196.controllers.AddTerm;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.c196.controllers.AssessmentList;
 import com.example.c196.controllers.CourseList;
-import com.example.c196.controllers.EditAssessment;
-import com.example.c196.controllers.EditCourse;
-import com.example.c196.controllers.EditTerm;
+import com.example.c196.controllers.GenerateSchedule;
 import com.example.c196.controllers.MenuActivity;
 import com.example.c196.controllers.TermList;
 import com.example.c196.database.AppDatabase;
 import com.example.c196.database.Repository;
-import com.example.c196.entities.Notes;
+import com.example.c196.Utility.PDFGenerator;
+
+import java.util.List;
 
 public class MainActivity extends MenuActivity {
 
+    private static final int PERMISSION_REQUEST_CODE = 100;
     private Button coursesButton;
     private Button assessmentsButton;
     private Button termsButton;
+    private Button scheduleButton;
+    private GenerateSchedule generateSchedule;
     private CalendarView homeCalendar;
 
     @Override
@@ -36,32 +40,41 @@ public class MainActivity extends MenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //initialize database and repository
+        // Initialize database and repository
         AppDatabase db = AppDatabase.getDatabase(this);
         Repository repository = new Repository(getApplication());
 
-        //make calendar show current date
+        // Make calendar show current date
         homeCalendar = findViewById(R.id.homeCalendar);
         long currentTime = System.currentTimeMillis();
         homeCalendar.setDate(currentTime, false, true);
 
-        //initialize buttons
+        // Initialize buttons
         coursesButton = findViewById(R.id.coursesButton);
         assessmentsButton = findViewById(R.id.assessmentsButton);
         termsButton = findViewById(R.id.termsButton);
+        scheduleButton = findViewById(R.id.scheduleButton);
 
-        //set click listeners
+        // Set click listeners
         coursesButton.setOnClickListener(view -> navigateToActivity(CourseList.class));
         assessmentsButton.setOnClickListener(view -> navigateToActivity(AssessmentList.class));
         termsButton.setOnClickListener(view -> navigateToActivity(TermList.class));
+
+        // Generate schedule button and handle permissions for it
+        generateSchedule = new ViewModelProvider(this).get(GenerateSchedule.class);
+
+        scheduleButton.setOnClickListener(v -> {
+            generateSchedule.generateSchedule().observe(this, scheduleItems -> {
+                PDFGenerator.generateSchedulePDF(this, scheduleItems);
+                Toast.makeText(MainActivity.this, "Schedule generated", Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 
-    //Menu functionality
+    // Menu functionality
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_menu, menu);
-
         return true;
     }
-
 }

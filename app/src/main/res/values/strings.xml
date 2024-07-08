@@ -3,6 +3,7 @@
     <string name="courses">Courses</string>
     <string name="terms">Terms</string>
     <string name="assessments">Assessments</string>
+    <string name="schedule">Generate Schedule</string>
 
     <!-- Arrays for course spinners -->
     <string-array name="assessment_types">
@@ -19,7 +20,7 @@
     </string-array>
 
     <!-- Log In/Registration details -->
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">Login</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>

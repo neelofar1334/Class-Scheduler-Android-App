@@ -25,6 +25,9 @@ public interface CoursesDAO {
     @Query("SELECT * FROM Courses WHERE termId = :termId")
     LiveData<List<Courses>> getCoursesByTermId(int termId);
 
+    @Query("SELECT * FROM courses WHERE termId = :termId")
+    LiveData<List<Courses>> getCoursesForTerm(int termId);
+
     //course validation
     @Query("SELECT EXISTS(SELECT 1 FROM Courses WHERE courseId = :courseId)")
     boolean courseExists(int courseId);

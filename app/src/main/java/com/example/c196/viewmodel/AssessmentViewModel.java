@@ -40,4 +40,8 @@ public class AssessmentViewModel extends AndroidViewModel {
     public void delete(Assessments assessments) {
         repository.delete(assessments);
     }
+
+    public LiveData<List<Assessments>> getAssessmentsForCourse(int courseId) {
+        return repository.getAssessmentsForCourse(courseId);
+    }
 }
