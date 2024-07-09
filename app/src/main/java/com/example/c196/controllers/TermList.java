@@ -1,27 +1,21 @@
 package com.example.c196.controllers;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.Toast;
 
 import com.example.c196.R;
-import com.example.c196.entities.Courses;
 import com.example.c196.entities.Terms;
 import com.example.c196.viewmodel.CourseViewModel;
 import com.example.c196.viewmodel.TermViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import View.CourseListAdapter;
 import View.TermListAdapter;
 
 public class TermList extends MenuActivity implements TermListAdapter.OnTermListener {
@@ -73,9 +67,15 @@ public class TermList extends MenuActivity implements TermListAdapter.OnTermList
 
         courseViewModel.getCoursesByTermId(term.getTermID()).observe(this, courses -> {
             if (courses.isEmpty()) {
-
-                termViewModel.delete(term);
-                Toast.makeText(this, "Term deleted successfully.", Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete Term")
+                        .setMessage("Are you sure you want to delete this term?")
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            termViewModel.delete(term);
+                            Toast.makeText(this, "Term deleted successfully.", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .show();
             } else {
                 Toast.makeText(this, "Cannot delete term, please delete associated courses first.", Toast.LENGTH_LONG).show();
             }

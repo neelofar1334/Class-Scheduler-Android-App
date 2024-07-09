@@ -1,7 +1,5 @@
 package com.example.c196.controllers;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,18 +9,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.c196.R;
 import com.example.c196.entities.Assessments;
-import com.example.c196.entities.Courses;
 import com.example.c196.viewmodel.AssessmentViewModel;
-import com.example.c196.viewmodel.CourseViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import View.AssessmentListAdapter;
-import View.CourseListAdapter;
 
 public class AssessmentList extends MenuActivity implements AssessmentListAdapter.onAssessmentListener {
 
@@ -80,15 +74,23 @@ public class AssessmentList extends MenuActivity implements AssessmentListAdapte
     public void onDeleteClicked(int position) {
         if (adapter != null) {
             Assessments assessments = adapter.getAssessmentAtPosition(position);
-            assessmentViewModel.delete(assessments);
-            adapter.notifyItemRemoved(position);
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete Assessment")
+                    .setMessage("Are you sure you want to delete this assessment?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        assessmentViewModel.delete(assessments);
+                        adapter.notifyItemRemoved(position);
+                        Toast.makeText(this, "Assessment deleted", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
         } else {
             Log.e("AssessmentList", "Adapter is not initialized.");
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu (Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_menu, menu);
         return true;
     }

@@ -1,6 +1,6 @@
 package com.example.c196.controllers;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,9 +11,6 @@ import android.view.Menu;
 import android.widget.Toast;
 
 import com.example.c196.R;
-
-import java.util.ArrayList;
-
 import View.CourseListAdapter;
 
 import com.example.c196.entities.Courses;
@@ -56,8 +53,16 @@ public class CourseList extends MenuActivity implements CourseListAdapter.OnCour
     @Override
     public void onDeleteClicked(int position) {
         Courses course = adapter.getCourseAtPosition(position);
-        courseViewModel.delete(course);
-        Toast.makeText(this, "Course deleted", Toast.LENGTH_SHORT).show();
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Course")
+                .setMessage("Are you sure you want to delete this course?")
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    courseViewModel.delete(course);
+                    adapter.notifyItemRemoved(position);
+                    Toast.makeText(this, "Course deleted", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
     }
 
     @Override

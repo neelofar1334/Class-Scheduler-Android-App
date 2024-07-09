@@ -1,7 +1,5 @@
 package com.example.c196.controllers;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,15 +9,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.c196.DAO.AssessmentsDAO;
-import com.example.c196.DAO.CoursesDAO;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.c196.R;
-import com.example.c196.database.AppDatabase;
 import com.example.c196.database.Repository;
 import com.example.c196.entities.Courses;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class EditCourse extends MenuActivity {
@@ -76,7 +75,7 @@ public class EditCourse extends MenuActivity {
                     ArrayAdapter<String> adapter = (ArrayAdapter<String>) status.getAdapter();
                     int spinnerPosition = adapter.getPosition(course.getStatus());
                     status.setSelection(spinnerPosition);
-                    //other
+                    //instructor info
                     instructorNameEditText.setText(course.getInstructorName());
                     instructorEmailEditText.setText(course.getInstructorEmail());
                     instructorPhoneEditText.setText(course.getInstructorPhone());
@@ -108,17 +107,17 @@ public class EditCourse extends MenuActivity {
             Calendar date = Calendar.getInstance();
             date.set(year, month, dayOfMonth);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String formattedDate = format.format(date.getTime());
             if (isStart) {
-                startDate = format.format(date.getTime());
+                startDate = formattedDate;
                 startDatePickerButton.setText(String.format(Locale.getDefault(), "Start Date: %s", startDate));
             } else {
-                endDate = format.format(date.getTime());
+                endDate = formattedDate;
                 endDatePickerButton.setText(String.format(Locale.getDefault(), "End Date: %s", endDate));
             }
         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }
-
 
     //buttons
     private void setupSubmitButton() {
@@ -137,9 +136,7 @@ public class EditCourse extends MenuActivity {
             String instructorEmail = instructorEmailEditText.getText().toString().trim();
             String instructorPhone = instructorPhoneEditText.getText().toString().trim();
 
-            if (title.isEmpty() || status == null || instructorName.isEmpty() || instructorEmail.isEmpty() || instructorPhone.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
-                Log.e("SaveCourse", "Failed to save: One or more fields are empty.");
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            if (!validateInputs(title, courseStatus, instructorName, instructorEmail, instructorPhone, startDate, endDate)) {
                 return;
             }
 
@@ -156,6 +153,34 @@ public class EditCourse extends MenuActivity {
             finish();
         } else {
             Toast.makeText(this, "Unable to save: No course data", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //Validation
+    private boolean validateInputs(String title, String status, String instructorName, String instructorEmail, String instructorPhone, String startDate, String endDate) {
+        if (title.isEmpty() || status == null || instructorName.isEmpty() || instructorEmail.isEmpty() || instructorPhone.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
+            Log.e("SaveCourse", "Failed to save: One or more fields are empty.");
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!validateDates(startDate, endDate)) {
+            Toast.makeText(this, "End date must be after start date", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateDates(String startDate, String endDate) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        try {
+            Date start = format.parse(startDate);
+            Date end = format.parse(endDate);
+            return start != null && end != null && end.after(start);
+        } catch (ParseException e) {
+            Log.e("ValidateDates", "Date parsing error", e);
+            return false;
         }
     }
 }

@@ -1,29 +1,22 @@
 package com.example.c196.controllers;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.c196.DAO.AssessmentsDAO;
-import com.example.c196.DAO.CoursesDAO;
-import com.example.c196.DAO.TermsDAO;
 import com.example.c196.R;
-import com.example.c196.database.AppDatabase;
 import com.example.c196.database.Repository;
-import com.example.c196.entities.Assessments;
-import com.example.c196.entities.Courses;
 import com.example.c196.entities.Terms;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class AddTerm extends MenuActivity {
 
@@ -86,22 +79,52 @@ public class AddTerm extends MenuActivity {
 
     private void saveTerm() {
         String title = titleEditText.getText().toString().trim();
+
+        if (validateInputs(title, startDate, endDate)) {
+            //create a new Term object
+            Terms term = new Terms();
+            term.setTitle(title);
+            term.setStartDate(startDate);
+            term.setEndDate(endDate);
+
+            //use the repository to insert the new term
+            repository.insert(term);
+
+            Toast.makeText(this, "Term added successfully", Toast.LENGTH_SHORT).show();
+
+            // Redirect to TermList activity
+            Intent intent = new Intent(AddTerm.this, TermList.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    //Validation
+    private boolean validateInputs(String title, String startDate, String endDate) {
         if (title.isEmpty() || startDate == null || endDate == null) {
             Log.e("SaveTerm", "Failed to save: One or more fields are empty.");
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
-        //create a new Term object
-        Terms term = new Terms();
-        term.setTitle(title);
-        term.setStartDate(startDate);
-        term.setEndDate(endDate);
+        if (!validateDates(startDate, endDate)) {
+            Log.e("SaveTerm", "Failed to save: End date is before start date.");
+            Toast.makeText(this, "End date must be after start date", Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
-        //use the repository to insert the new term
-        repository.insert(term);
+        return true;
+    }
 
-        Toast.makeText(this, "Term added successfully", Toast.LENGTH_SHORT).show();
-        finish();
+    private boolean validateDates(String startDate, String endDate) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        try {
+            Date start = format.parse(startDate);
+            Date end = format.parse(endDate);
+            return start != null && end != null && end.after(start);
+        } catch (ParseException e) {
+            Log.e("ValidateDates", "Date parsing error", e);
+            return false;
+        }
     }
 }

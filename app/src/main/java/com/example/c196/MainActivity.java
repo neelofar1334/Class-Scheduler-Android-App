@@ -27,7 +27,6 @@ import java.util.List;
 
 public class MainActivity extends MenuActivity {
 
-    private static final int PERMISSION_REQUEST_CODE = 100;
     private Button coursesButton;
     private Button assessmentsButton;
     private Button termsButton;

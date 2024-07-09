@@ -4,25 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
-import com.example.c196.DAO.AssessmentsDAO;
-import com.example.c196.DAO.CoursesDAO;
-import com.example.c196.DAO.TermsDAO;
 import com.example.c196.R;
-import com.example.c196.database.AppDatabase;
 import com.example.c196.database.Repository;
-import com.example.c196.entities.Assessments;
-import com.example.c196.entities.Courses;
 import com.example.c196.entities.Terms;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class EditTerm extends MenuActivity {
@@ -92,11 +86,12 @@ public class EditTerm extends MenuActivity {
             Calendar date = Calendar.getInstance();
             date.set(year, month, dayOfMonth);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String formattedDate = format.format(date.getTime());
             if (isStart) {
-                startDate = format.format(date.getTime());
+                startDate = formattedDate;
                 startDatePickerButton.setText(String.format(Locale.getDefault(), "Start Date: %s", startDate));
             } else {
-                endDate = format.format(date.getTime());
+                endDate = formattedDate;
                 endDatePickerButton.setText(String.format(Locale.getDefault(), "End Date: %s", endDate));
             }
         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
@@ -114,7 +109,12 @@ public class EditTerm extends MenuActivity {
 
     private void saveTerm() {
         if (terms != null) {
-            terms.setTitle(titleEditText.getText().toString().trim());
+            String title = titleEditText.getText().toString().trim();
+            if (!validateInputs(title, startDate, endDate)) {
+                return;
+            }
+
+            terms.setTitle(title);
             terms.setStartDate(startDate);
             terms.setEndDate(endDate);
 
@@ -123,6 +123,34 @@ public class EditTerm extends MenuActivity {
             finish();
         } else {
             Toast.makeText(this, "Unable to save: No term data", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //Validation
+    private boolean validateInputs(String title, String startDate, String endDate) {
+        if (title.isEmpty() || startDate == null || endDate == null) {
+            Log.e("SaveTerm", "Failed to save: One or more fields are empty.");
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!validateDates(startDate, endDate)) {
+            Toast.makeText(this, "End date must be after start date", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateDates(String startDate, String endDate) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        try {
+            Date start = format.parse(startDate);
+            Date end = format.parse(endDate);
+            return start != null && end != null && end.after(start);
+        } catch (ParseException e) {
+            Log.e("ValidateDates", "Date parsing error", e);
+            return false;
         }
     }
 }

@@ -41,18 +41,18 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Initialize ViewModel
+        //Initialize ViewModel
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(getApplication()))
                 .get(LoginViewModel.class);
 
-        // Initialize UI components
+        //Initialize UI components
         usernameEditText = findViewById(R.id.username);
         passwordEditText = findViewById(R.id.password);
         loginButton = findViewById(R.id.login);
         registerLink = findViewById(R.id.registerLink);
         loadingProgressBar = findViewById(R.id.loading);
 
-        // Observe login form state
+        //Login form state
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
             public void onChanged(@Nullable LoginFormState loginFormState) {
@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Observe login result
+        //Login result
         loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
             @Override
             public void onChanged(@Nullable LoginResult loginResult) {
@@ -82,23 +82,23 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (loginResult.getSuccess() != null) {
                     updateUiWithUser(loginResult.getSuccess());
-                    // Show get started dialog
+                    //Show get started dialog
                     showGetStartedDialog();
                 }
                 setResult(Activity.RESULT_OK);
             }
         });
 
-        // Text change listener for form validation
+        //Form validation
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
+
             }
 
             @Override
@@ -121,17 +121,19 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Login button click listener
+        //Login button
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                if (validateInputs()) {
+                    loadingProgressBar.setVisibility(View.VISIBLE);
+                    loginViewModel.login(usernameEditText.getText().toString(),
+                            passwordEditText.getText().toString());
+                }
             }
         });
 
-        // Navigate to RegisterActivity
+        //Navigate to RegisterActivity
         registerLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,6 +141,24 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    //Validation
+    private boolean validateInputs() {
+        String username = usernameEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
+
+        if (username.isEmpty()) {
+            usernameEditText.setError(getString(R.string.invalid_username));
+            return false;
+        }
+
+        if (password.isEmpty()) {
+            passwordEditText.setError(getString(R.string.invalid_password));
+            return false;
+        }
+
+        return true;
     }
 
     //Add term dialog box
@@ -169,7 +189,6 @@ public class LoginActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
 
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();

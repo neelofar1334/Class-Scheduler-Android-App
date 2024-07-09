@@ -31,11 +31,11 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        // Initialize ViewModel with factory
+        //Initialize ViewModel
         RegistrationViewModelFactory factory = new RegistrationViewModelFactory(getApplication());
         viewModel = new ViewModelProvider(this, factory).get(RegistrationViewModel.class);
 
-        // Initialize UI components
+        //Initialize UI components
         studentIdLabel = findViewById(R.id.studentIdLabel);
         adminPermissionsLabel = findViewById(R.id.adminPermissionsLabel);
         userTypeSpinner = findViewById(R.id.userTypeSpinner);
@@ -72,7 +72,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // Do nothing here
+                //Do nothing here
             }
         });
 
@@ -87,6 +87,11 @@ public class RegistrationActivity extends AppCompatActivity {
 
         if (username.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (password.length() <= 5) {
+            passwordEditText.setError("Password must be more than 5 characters");
             return;
         }
 
@@ -118,4 +123,3 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 }
-

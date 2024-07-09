@@ -1,33 +1,25 @@
 package com.example.c196.controllers;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.c196.DAO.AssessmentsDAO;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.c196.R;
-import com.example.c196.database.AppDatabase;
 import com.example.c196.database.Repository;
 import com.example.c196.entities.Assessments;
-import com.example.c196.entities.Courses;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class EditAssessment extends MenuActivity {
 
@@ -134,8 +126,7 @@ public class EditAssessment extends MenuActivity {
             String title = titleEditText.getText().toString().trim();
             String type = typeSpinner.getSelectedItem().toString();
 
-            if (title.isEmpty()) {
-                Toast.makeText(this, "Please complete all fields", Toast.LENGTH_SHORT).show();
+            if (!validateInputs(title, startDate, endDate)) {
                 return;
             }
 
@@ -152,4 +143,30 @@ public class EditAssessment extends MenuActivity {
         }
     }
 
+    //Validation
+    private boolean validateInputs(String title, String startDate, String endDate) {
+        if (title.isEmpty()) {
+            Toast.makeText(this, "Please complete all fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!validateDates(startDate, endDate)) {
+            Toast.makeText(this, "End date must be after start date", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateDates(String startDate, String endDate) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        try {
+            Date start = format.parse(startDate);
+            Date end = format.parse(endDate);
+            return start != null && end != null && end.after(start);
+        } catch (ParseException e) {
+            Log.e("ValidateDates", "Date parsing error", e);
+            return false;
+        }
+    }
 }

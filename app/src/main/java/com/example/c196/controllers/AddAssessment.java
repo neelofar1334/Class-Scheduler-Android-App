@@ -17,8 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.example.c196.database.Repository;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -33,19 +35,20 @@ public class AddAssessment extends MenuActivity {
     private String startDate, endDate, assessmentType;
     private Repository repository;
     private int courseId;
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_assessment);
 
-        //retrieve termId passed from TermDetail
+        //Retrieve courseId passed from the previous activity
         courseId = getIntent().getIntExtra("courseId", -1);
 
-        //initialize the repository
+        //Initialize the repository
         repository = new Repository(getApplication());
 
-        //initialize UI components
+        //Initialize UI components
         startDatePickerButton = findViewById(R.id.startDatePicker);
         endDatePickerButton = findViewById(R.id.endDatePicker);
         titleEditText = findViewById(R.id.title);
@@ -57,33 +60,32 @@ public class AddAssessment extends MenuActivity {
         setupDatePickerButtons();
         setupSubmitButton();
         setupCancelButton();
-
     }
 
-       //spinner implementation
-       private void setupSpinner() {
-           ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                   R.array.assessment_types, android.R.layout.simple_spinner_item);
-           adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-           typeSpinner.setAdapter(adapter);
-           typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-               @Override
-               public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                   if (position > 0) {
-                       assessmentType = parentView.getItemAtPosition(position).toString();
-                   } else {
-                       assessmentType = null;
-                   }
-               }
+    //Spinner implementation
+    private void setupSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.assessment_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeSpinner.setAdapter(adapter);
+        typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (position > 0) {
+                    assessmentType = parentView.getItemAtPosition(position).toString();
+                } else {
+                    assessmentType = null;
+                }
+            }
 
-               @Override
-               public void onNothingSelected(AdapterView<?> parentView) {
-                   assessmentType = null;
-               }
-           });
-       }
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                assessmentType = null;
+            }
+        });
+    }
 
-       //datePicker implementation
+    //DatePicker implementation
     private void setupDatePickerButtons() {
         startDatePickerButton.setOnClickListener(v -> showDatePickerDialog(true));
         endDatePickerButton.setOnClickListener(v -> showDatePickerDialog(false));
@@ -94,47 +96,60 @@ public class AddAssessment extends MenuActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
             Calendar date = Calendar.getInstance();
             date.set(year, month, dayOfMonth);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String formattedDate = DATE_FORMAT.format(date.getTime());
             if (isStart) {
-                startDate = format.format(date.getTime());
+                startDate = formattedDate;
                 startDatePickerButton.setText(String.format(Locale.getDefault(), "Start Date: %s", startDate));
             } else {
-                endDate = format.format(date.getTime());
+                endDate = formattedDate;
                 endDatePickerButton.setText(String.format(Locale.getDefault(), "End Date: %s", endDate));
             }
         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }
 
-
     private void setupSubmitButton() {
         submitButton.setOnClickListener(v -> saveAssessment());
     }
 
     private void setupCancelButton() {
-        cancelButton.setOnClickListener(v -> finish()); //close the activity
+        cancelButton.setOnClickListener(v -> finish()); //Close the activity
     }
 
     private void saveAssessment() {
         String title = titleEditText.getText().toString().trim();
         if (title.isEmpty() || assessmentType == null || startDate == null || endDate == null) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-        } else {
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.execute(() -> {
-                boolean courseExists = repository.courseExists(courseId); //course validation
-                if (courseExists) {
-                    Assessments assessment = new Assessments(courseId, title, assessmentType, startDate, endDate);
-                    repository.insert(assessment);
-                    runOnUiThread(() -> {
-                        Toast.makeText(AddAssessment.this, "Assessment saved successfully", Toast.LENGTH_SHORT).show();
-                        finish();
-                    });
-                } else {
-                    runOnUiThread(() -> Toast.makeText(AddAssessment.this, "Invalid course ID", Toast.LENGTH_SHORT).show());
-                }
-            });
+            return;
         }
+
+        //Date Validation
+        if (!validateDates(startDate, endDate)) {
+            Toast.makeText(this, "Invalid date range. End date must be after start date.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            boolean courseExists = repository.courseExists(courseId); //Course validation
+            if (courseExists) {
+                Assessments assessment = new Assessments(courseId, title, assessmentType, startDate, endDate);
+                repository.insert(assessment);
+                runOnUiThread(() -> {
+                    Toast.makeText(AddAssessment.this, "Assessment saved successfully", Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+            } else {
+                runOnUiThread(() -> Toast.makeText(AddAssessment.this, "Invalid course ID", Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 
+    private boolean validateDates(String startDate, String endDate) {
+        try {
+            return DATE_FORMAT.parse(startDate).before(DATE_FORMAT.parse(endDate));
+        } catch (ParseException e) {
+            return false;
+        }
+    }
 }

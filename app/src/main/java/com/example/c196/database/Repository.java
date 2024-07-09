@@ -92,6 +92,10 @@ public class Repository {
     public LiveData<Terms> getTermById(int termId) {
         return mTermsDAO.getTermById(termId);
     }
+    //term validation
+    public boolean termExists(int termId) {
+        return mTermsDAO.termExists(termId);
+    }
 
 
     //Assessments

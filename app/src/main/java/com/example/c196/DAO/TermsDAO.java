@@ -24,6 +24,10 @@ public interface TermsDAO {
     @Query("SELECT * FROM terms WHERE termID = :termID LIMIT 1")
     LiveData<Terms> getTermById(int termID);
 
+    //term validation
+    @Query("SELECT EXISTS(SELECT 1 FROM Terms WHERE termID = :termId)")
+    boolean termExists(int termId);
+
     //inserts new term
     @Insert(onConflict = OnConflictStrategy.ABORT)
     void insert(Terms term);

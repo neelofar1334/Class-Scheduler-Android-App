@@ -36,24 +36,31 @@ public class AddNotes extends MenuActivity {
             finish();
         }
 
-        saveButton.setOnClickListener(v -> {
-            String title = noteTitleEditText.getText().toString().trim();
-            String text = noteTextEditText.getText().toString().trim();
-            if (!title.isEmpty() && !text.isEmpty()) {
-                saveNote(title, text);
-            } else {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-            }
-        });
+        saveButton.setOnClickListener(v -> saveNote());
 
         setupCancelButton();
     }
 
-    private void saveNote(String title, String text) {
-        Notes note = new Notes(title, text, courseId);
-        repository.insert(note);
-        Toast.makeText(this, "Note saved successfully", Toast.LENGTH_SHORT).show();
-        finish();
+    private void saveNote() {
+        String title = noteTitleEditText.getText().toString().trim();
+        String text = noteTextEditText.getText().toString().trim();
+
+        if (validateInputs(title, text)) {
+            Notes note = new Notes(title, text, courseId);
+            repository.insert(note);
+            Toast.makeText(this, "Note saved successfully", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+    //Validation
+    private boolean validateInputs(String title, String text) {
+        if (title.isEmpty() || text.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
     private void setupCancelButton() {
