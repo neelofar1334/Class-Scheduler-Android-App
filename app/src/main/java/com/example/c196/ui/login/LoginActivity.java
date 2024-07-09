@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -148,6 +149,7 @@ public class LoginActivity extends AppCompatActivity {
         builder.setView(dialogView);
 
         Button addTermButton = dialogView.findViewById(R.id.addTermButton);
+        ImageView homeIcon = dialogView.findViewById(R.id.home);
 
         AlertDialog dialog = builder.create();
 
@@ -157,10 +159,17 @@ public class LoginActivity extends AppCompatActivity {
             dialog.dismiss();
         });
 
+        homeIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            dialog.dismiss();
+        });
+
         builder.setNegativeButton("Close", (dialogInterface, which) -> dialog.dismiss());
 
         dialog.show();
     }
+
 
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
