@@ -40,6 +40,7 @@
             android:enabled="true"
             android:exported="true" />
 
+        <activity android:name=".controllers.MenuActivity" />
         <activity
             android:name=".registration.RegistrationActivity"
             android:exported="true" />

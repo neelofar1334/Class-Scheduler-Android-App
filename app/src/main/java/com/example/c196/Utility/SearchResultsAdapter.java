@@ -9,16 +9,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.c196.R;
-import com.example.c196.Utility.SearchResult;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.SearchResultViewHolder> {
 
-    private ArrayList<SearchResult> searchResults;
+    private List<SearchResult> searchResults;
+    private OnItemClickListener listener;
 
-    public SearchResultsAdapter(ArrayList<SearchResult> searchResults) {
+    public SearchResultsAdapter(List<SearchResult> searchResults, OnItemClickListener listener) {
         this.searchResults = searchResults;
+        this.listener = listener;
     }
 
     @NonNull
@@ -31,12 +32,17 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     @Override
     public void onBindViewHolder(@NonNull SearchResultViewHolder holder, int position) {
         SearchResult searchResult = searchResults.get(position);
-        holder.textView.setText(searchResult.getType() + ": " + searchResult.getTitle());
+        holder.textView.setText(searchResult.getTitle());
+        holder.itemView.setOnClickListener(v -> listener.onItemClick(searchResult));
     }
 
     @Override
     public int getItemCount() {
         return searchResults.size();
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(SearchResult searchResult);
     }
 
     public static class SearchResultViewHolder extends RecyclerView.ViewHolder {

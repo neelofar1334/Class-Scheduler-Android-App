@@ -9,5 +9,6 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search Result" />
+        android:text="Search Result"
+        style="@style/AppText"/>
 </LinearLayout>
