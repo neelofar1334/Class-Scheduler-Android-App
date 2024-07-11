@@ -83,6 +83,9 @@
             android:name=".controllers.TermList"
             android:exported="true" />
         <activity
+            android:name=".controllers.SearchResultsActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
 

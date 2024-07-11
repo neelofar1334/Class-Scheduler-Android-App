@@ -1,19 +1,11 @@
 package com.example.c196;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
+import com.example.c196.Utility.PDFGenerator;
 import com.example.c196.controllers.AssessmentList;
 import com.example.c196.controllers.CourseList;
 import com.example.c196.controllers.GenerateSchedule;
@@ -21,9 +13,6 @@ import com.example.c196.controllers.MenuActivity;
 import com.example.c196.controllers.TermList;
 import com.example.c196.database.AppDatabase;
 import com.example.c196.database.Repository;
-import com.example.c196.Utility.PDFGenerator;
-
-import java.util.List;
 
 public class MainActivity extends MenuActivity {
 
@@ -68,12 +57,5 @@ public class MainActivity extends MenuActivity {
                 Toast.makeText(MainActivity.this, "Schedule generated", Toast.LENGTH_SHORT).show();
             });
         });
-    }
-
-    // Menu functionality
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.my_menu, menu);
-        return true;
     }
 }
