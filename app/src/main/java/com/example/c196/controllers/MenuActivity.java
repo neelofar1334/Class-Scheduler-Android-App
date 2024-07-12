@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -36,7 +39,17 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        //Check if the activity is not MainActivity, then enable back button
+        if (!(this instanceof MainActivity)) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+            getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    finish();
+                }
+            });
+        }
 
         // Initialize ViewModels
         courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
@@ -67,7 +80,7 @@ public class MenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_menu, menu);
 
-        // Search function for action bar
+        //Search function for action bar
         MenuItem searchItem = menu.findItem(R.id.actionSearch);
         SearchView searchView = (SearchView) searchItem.getActionView();
 
@@ -83,7 +96,6 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.d("Search", "Query text changed: " + newText);
-                // Perform live search here if needed
                 return false;
             }
         });
@@ -117,9 +129,13 @@ public class MenuActivity extends AppCompatActivity {
             }
         }
 
+        if (searchResults.isEmpty()) {
+            Toast.makeText(this, "No results found", Toast.LENGTH_SHORT).show();
+        }
+
         Log.d("MenuActivity", "Total search results: " + searchResults.size());
 
-        //Pass searchResults to the SearchResultsActivity
+        // Pass searchResults to the SearchResultsActivity
         Intent intent = new Intent(this, SearchResultsActivity.class);
         intent.putExtra("searchResults", (ArrayList<SearchResult>) searchResults);
         startActivity(intent);
@@ -129,9 +145,8 @@ public class MenuActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
-        // Handle the up button
         if (itemId == android.R.id.home) {
-            onBackPressed();
+            finish();
             return true;
         }
 

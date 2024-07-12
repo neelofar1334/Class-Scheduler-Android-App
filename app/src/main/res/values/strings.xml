@@ -31,6 +31,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="user_exists">User already exists</string>
     <string name="register_failed">Registration failed</string>
+    <string name="search_hint" />
 
     <!-- Arrays for Log In spinners -->
     <string-array name="user_types">

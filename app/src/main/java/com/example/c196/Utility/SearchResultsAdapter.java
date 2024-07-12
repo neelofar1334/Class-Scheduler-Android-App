@@ -1,5 +1,7 @@
 package com.example.c196.Utility;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,31 +11,54 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.c196.R;
+import com.example.c196.controllers.AssessmentDetail;
+import com.example.c196.controllers.CourseDetail;
+import com.example.c196.controllers.TermDetail;
 
 import java.util.List;
 
-public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.SearchResultViewHolder> {
+public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.ViewHolder> {
 
     private List<SearchResult> searchResults;
-    private OnItemClickListener listener;
+    private Context context;
 
-    public SearchResultsAdapter(List<SearchResult> searchResults, OnItemClickListener listener) {
+    public SearchResultsAdapter(List<SearchResult> searchResults, Context context) {
         this.searchResults = searchResults;
-        this.listener = listener;
+        this.context = context;
     }
 
     @NonNull
     @Override
-    public SearchResultViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_result_item, parent, false);
-        return new SearchResultViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchResultViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SearchResult searchResult = searchResults.get(position);
         holder.textView.setText(searchResult.getTitle());
-        holder.itemView.setOnClickListener(v -> listener.onItemClick(searchResult));
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent;
+            switch (searchResult.getType()) {
+                case "Course":
+                    intent = new Intent(context, CourseDetail.class);
+                    intent.putExtra("courseId", searchResult.getId());
+                    break;
+                case "Assessment":
+                    intent = new Intent(context, AssessmentDetail.class);
+                    intent.putExtra("assessmentId", searchResult.getId());
+                    break;
+                case "Term":
+                    intent = new Intent(context, TermDetail.class);
+                    intent.putExtra("termId", searchResult.getId());
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid search result type");
+            }
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -41,14 +66,10 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         return searchResults.size();
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(SearchResult searchResult);
-    }
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView textView;
 
-    public static class SearchResultViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
-
-        public SearchResultViewHolder(@NonNull View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.textView);
         }
