@@ -4,7 +4,6 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.c196.DAO.CoursesDAO;
 import com.example.c196.database.Repository;
@@ -13,13 +12,21 @@ import com.example.c196.entities.Courses;
 import java.util.List;
 
 public class CourseViewModel extends AndroidViewModel {
-    private final LiveData<List<Courses>> allCourses;
-    private final Repository repository;
+    private LiveData<List<Courses>> allCourses;
+    private Repository repository;
+    private CoursesDAO coursesDAO;
 
     public CourseViewModel(Application application) {
         super(application);
         repository = new Repository(application);
-        allCourses = repository.getAllCourses();
+        coursesDAO = repository.getCoursesDAO();
+        allCourses = coursesDAO.getAllCourses();
+    }
+
+    // Setter method for testing purposes
+    public void setCoursesDAO(CoursesDAO coursesDAO) {
+        this.coursesDAO = coursesDAO;
+        allCourses = coursesDAO.getAllCourses();
     }
 
     public LiveData<List<Courses>> getAllCourses() {
@@ -27,14 +34,14 @@ public class CourseViewModel extends AndroidViewModel {
     }
 
     public LiveData<Courses> getCourseById(int courseId) {
-        return repository.getCourseById(courseId);
+        return coursesDAO.getCourseById(courseId);
     }
 
     public LiveData<List<Courses>> getCoursesByTermId(int termId) {
-        return repository.getCoursesByTermId(termId);
+        return coursesDAO.getCoursesByTermId(termId);
     }
 
     public void delete(Courses course) {
-        repository.delete(course);
+        coursesDAO.delete(course);
     }
 }

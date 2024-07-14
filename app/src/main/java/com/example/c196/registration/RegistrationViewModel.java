@@ -26,11 +26,11 @@ public class RegistrationViewModel extends AndroidViewModel {
 
     private MutableLiveData<RegisterFormState> registerFormState = new MutableLiveData<>();
     private MutableLiveData<UserRegistrationResult> registerResult = new MutableLiveData<>();
-    private final RegistrationRepository registrationRepository;
-    private final UsersDAO usersDAO;
-    private final AdminDAO adminDAO;
-    private final StudentDAO studentDAO;
-    private final ExecutorService executorService;
+    private RegistrationRepository registrationRepository;
+    private UsersDAO usersDAO;
+    private AdminDAO adminDAO;
+    private StudentDAO studentDAO;
+    private ExecutorService executorService;
 
     public RegistrationViewModel(@NonNull Application application) {
         super(application);
@@ -40,6 +40,19 @@ public class RegistrationViewModel extends AndroidViewModel {
         studentDAO = db.studentDAO();
         registrationRepository = new RegistrationRepository(application);
         executorService = Executors.newSingleThreadExecutor();
+    }
+
+    // Setter methods for testing purposes
+    public void setUsersDAO(UsersDAO usersDAO) {
+        this.usersDAO = usersDAO;
+    }
+
+    public void setAdminDAO(AdminDAO adminDAO) {
+        this.adminDAO = adminDAO;
+    }
+
+    public void setStudentDAO(StudentDAO studentDAO) {
+        this.studentDAO = studentDAO;
     }
 
     public LiveData<RegisterFormState> getRegisterFormState() {
@@ -89,9 +102,8 @@ public class RegistrationViewModel extends AndroidViewModel {
     }
 
     public void registerDataChanged(String username, String password) {
-        if (!isUserNameValid(username)) {
-            registerFormState.setValue(new RegisterFormState(R.string.invalid_username, null));
-        } else if (!isPasswordValid(password)) {
+        if (!isUserNameValid(username))            registerFormState.setValue(new RegisterFormState(R.string.invalid_username, null));
+        else if (!isPasswordValid(password)) {
             registerFormState.setValue(new RegisterFormState(null, R.string.invalid_password));
         } else {
             registerFormState.setValue(new RegisterFormState(true));

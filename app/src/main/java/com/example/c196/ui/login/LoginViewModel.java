@@ -14,8 +14,6 @@ import com.example.c196.R;
 import com.example.c196.DAO.UsersDAO;
 import com.example.c196.database.AppDatabase;
 import com.example.c196.database.loginData.LModel.LoginRepository;
-import com.example.c196.database.loginData.LModel.LoggedInUser;
-import com.example.c196.database.loginData.LModel.loginResult;
 import com.example.c196.entities.User;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,9 +22,9 @@ public class LoginViewModel extends AndroidViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private final LoginRepository loginRepository;
+    private LoginRepository loginRepository;
     private final ExecutorService executorService;
-    private final UsersDAO usersDAO;
+    private UsersDAO usersDAO;
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -34,6 +32,15 @@ public class LoginViewModel extends AndroidViewModel {
         loginRepository = LoginRepository.getInstance(application);
         executorService = Executors.newSingleThreadExecutor();
         usersDAO = db.usersDAO();
+    }
+
+    //Methods for testing purposes
+    public void setUsersDAO(UsersDAO usersDAO) {
+        this.usersDAO = usersDAO;
+    }
+
+    public void setLoginRepository(LoginRepository loginRepository) {
+        this.loginRepository = loginRepository;
     }
 
     public LiveData<LoginFormState> getLoginFormState() {
@@ -92,3 +99,4 @@ public class LoginViewModel extends AndroidViewModel {
         return password != null && password.trim().length() > 5;
     }
 }
+

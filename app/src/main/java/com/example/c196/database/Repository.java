@@ -63,6 +63,8 @@ public class Repository {
     public LiveData<List<Courses>> getCoursesByTermId(int termId) {
         return mCourseDAO.getCoursesByTermId(termId);
     }
+    public CoursesDAO getCoursesDAO() { return mCourseDAO;
+    }
     //course validation
     public boolean courseExists(int courseId) {
         return mCourseDAO.courseExists(courseId);
@@ -92,6 +94,8 @@ public class Repository {
     public LiveData<Terms> getTermById(int termId) {
         return mTermsDAO.getTermById(termId);
     }
+    public TermsDAO getTermsDAO() {
+        return mTermsDAO;}
     //term validation
     public boolean termExists(int termId) {
         return mTermsDAO.termExists(termId);
@@ -150,4 +154,5 @@ public class Repository {
     public LiveData<List<Assessments>> getAssessmentsForCourse(int courseId) {
         return mAssessmentsDAO.getAssessmentsForCourse(courseId);
     }
+
 }
