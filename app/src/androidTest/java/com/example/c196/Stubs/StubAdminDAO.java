@@ -1,7 +1,8 @@
-package com.example.c196.DAO;
+package com.example.c196.Stubs;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.c196.DAO.AdminDAO;
 import com.example.c196.entities.Admin;
 import java.util.HashMap;
 import java.util.List;

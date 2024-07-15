@@ -40,7 +40,7 @@ public class TermViewModel extends AndroidViewModel {
     }
 
     public void delete(Terms terms) {
-        termsDAO.delete(terms);
+        repository.delete(terms);
     }
 
     public LiveData<List<Courses>> getCoursesForTerm(int termId) {

@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import View.AssessmentListAdapter;
 
 public class AssessmentList extends MenuActivity implements AssessmentListAdapter.onAssessmentListener {
 
+    private static final String TAG = "AssessmentList";
     private AssessmentListAdapter adapter;
     private AssessmentViewModel assessmentViewModel;
 
@@ -28,7 +31,7 @@ public class AssessmentList extends MenuActivity implements AssessmentListAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assessment_list);
 
-        //initialize recyclerView and adapter
+        // Initialize RecyclerView and adapter
         RecyclerView recyclerView = findViewById(R.id.assessments_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -52,9 +55,9 @@ public class AssessmentList extends MenuActivity implements AssessmentListAdapte
             Intent intent = new Intent(AssessmentList.this, AssessmentDetail.class);
             intent.putExtra("assessmentId", assessment.getAssessmentId());
             startActivity(intent);
-            Log.d("AssessmentList", "Viewing assessment: " + assessment.getAssessmentId());
+            Log.d(TAG, "Viewing assessment: " + assessment.getAssessmentId());
         } else {
-            Log.e("AssessmentList", "Adapter is not initialized.");
+            Log.e(TAG, "Adapter is not initialized.");
         }
     }
 
@@ -66,7 +69,7 @@ public class AssessmentList extends MenuActivity implements AssessmentListAdapte
             intent.putExtra("assessmentId", assessments.getAssessmentId());
             startActivity(intent);
         } else {
-            Log.e("AssessmentList", "Adapter is not initialized.");
+            Log.e(TAG, "Adapter is not initialized.");
         }
     }
 
@@ -78,14 +81,21 @@ public class AssessmentList extends MenuActivity implements AssessmentListAdapte
                     .setTitle("Delete Assessment")
                     .setMessage("Are you sure you want to delete this assessment?")
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                        assessmentViewModel.delete(assessments);
-                        adapter.notifyItemRemoved(position);
-                        Toast.makeText(this, "Assessment deleted", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Deleting assessment: " + assessments.getAssessmentId());
+
+                        // Ensure delete operation is performed on a background thread
+                        new Thread(() -> {
+                            assessmentViewModel.delete(assessments);
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                adapter.notifyItemRemoved(position);
+                                Toast.makeText(this, "Assessment deleted", Toast.LENGTH_SHORT).show();
+                            });
+                        }).start();
                     })
                     .setNegativeButton(android.R.string.no, null)
                     .show();
         } else {
-            Log.e("AssessmentList", "Adapter is not initialized.");
+            Log.e(TAG, "Adapter is not initialized.");
         }
     }
 

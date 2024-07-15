@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 import android.app.Application;
 
 import com.example.c196.R;
-import com.example.c196.DAO.StubUsersDAO;
+import com.example.c196.Stubs.StubUsersDAO;
 import com.example.c196.entities.User;
 import com.example.c196.database.loginData.LModel.LoginRepository;
 

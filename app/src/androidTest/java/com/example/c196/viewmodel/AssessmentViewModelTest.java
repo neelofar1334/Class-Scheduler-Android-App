@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 
 import android.app.Application;
 
-import com.example.c196.DAO.StubAssessmentsDAO;
+import com.example.c196.Stubs.StubAssessmentsDAO;
 import com.example.c196.entities.Assessments;
 
 import java.util.List;

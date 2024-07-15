@@ -1,11 +1,9 @@
 package com.example.c196.entities;
-import java.util.Date;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
 @Entity(tableName = "Courses",
         foreignKeys = @ForeignKey(entity = Terms.class,
@@ -31,7 +29,7 @@ public class Courses {
     @ColumnInfo(name = "instructorPhone")
     private String instructorPhone;
     @ColumnInfo(name = "termId")
-    private int termId; //foreign key linked to Term Entity
+    private int termId; // foreign key linked to Term Entity
 
     public Courses(String title, String startDate, String endDate, String status, String instructorName, String instructorEmail, String instructorPhone, int termId) {
         this.title = title;
@@ -44,7 +42,7 @@ public class Courses {
         this.termId = termId;
     }
 
-    //no args constructor for room framework
+    // No-args constructor for Room framework
     public Courses() {
     }
 
@@ -119,10 +117,4 @@ public class Courses {
     public void setTermId(int termId) {
         this.termId = termId;
     }
-
 }
-
-
-
-
-

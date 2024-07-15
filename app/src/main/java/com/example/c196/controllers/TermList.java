@@ -29,21 +29,20 @@ public class TermList extends MenuActivity implements TermListAdapter.OnTermList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_list);
 
-        //initialize recyclerView and adapter
+        // Initialize RecyclerView and adapter
         RecyclerView recyclerView = findViewById(R.id.terms_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new TermListAdapter(this, new ArrayList<>(), this);
         recyclerView.setAdapter(adapter);
 
-        //initialize viewModels
+        // Initialize ViewModels
         termViewModel = new ViewModelProvider(this).get(TermViewModel.class);
         courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
 
-        //ViewModel methods
+        // ViewModel methods
         termViewModel.getAllTerms().observe(this, terms -> {
             adapter.setTerms(terms);
         });
-
     }
 
     @Override
@@ -53,6 +52,7 @@ public class TermList extends MenuActivity implements TermListAdapter.OnTermList
         intent.putExtra("termId", terms.getTermID());
         startActivity(intent);
     }
+
     @Override
     public void onEditClicked(int position) {
         Terms terms = adapter.getTermAtPosition(position);

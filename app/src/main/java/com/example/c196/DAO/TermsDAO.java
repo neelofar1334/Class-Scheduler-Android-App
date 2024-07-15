@@ -39,5 +39,8 @@ public interface TermsDAO {
     //removes a term
     @Delete
     void delete(Terms term);
+
+    @Query("SELECT * FROM courses WHERE termId = :termId")
+    LiveData<List<Courses>> getCoursesForTerm(int termId);
 }
 

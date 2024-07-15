@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
@@ -18,8 +21,9 @@ import com.example.c196.viewmodel.CourseViewModel;
 
 public class CourseList extends MenuActivity implements CourseListAdapter.OnCourseListener {
 
-        private CourseListAdapter adapter;
-        private CourseViewModel courseViewModel;
+    private static final String TAG = "CourseList";
+    private CourseListAdapter adapter;
+    private CourseViewModel courseViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +57,21 @@ public class CourseList extends MenuActivity implements CourseListAdapter.OnCour
     @Override
     public void onDeleteClicked(int position) {
         Courses course = adapter.getCourseAtPosition(position);
+
         new AlertDialog.Builder(this)
                 .setTitle("Delete Course")
                 .setMessage("Are you sure you want to delete this course?")
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    courseViewModel.delete(course);
-                    adapter.notifyItemRemoved(position);
-                    Toast.makeText(this, "Course deleted", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Deleting course: " + course.getCourseId());
+
+                    //Ensure delete operation is performed on a background thread
+                    new Thread(() -> {
+                        courseViewModel.delete(course);
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            adapter.notifyItemRemoved(position);
+                            Toast.makeText(this, "Course deleted", Toast.LENGTH_SHORT).show();
+                        });
+                    }).start();
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .show();
@@ -79,4 +91,3 @@ public class CourseList extends MenuActivity implements CourseListAdapter.OnCour
         return true;
     }
 }
-
