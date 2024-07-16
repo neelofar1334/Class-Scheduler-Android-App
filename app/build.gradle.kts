@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.c196"
+    namespace = "com.karimi.c196"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.c196"
+        applicationId = "com.karimi.c196"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
