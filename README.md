@@ -19,7 +19,7 @@ This is an Android application developed as a part of C196 and added to/refined 
 - Android Studio
 - Android SDK
 - Java Development Kit (JDK)
-- (Optional) Repository located at https://gitlab.com/wgu7415723/c196.git
+- (Optional) Repository located at [https://gitlab.com/wgu7415723/c196.git](https://github.com/neelofar1334/Class-Scheduler-Android-App.git)
 
 ### Steps
 
